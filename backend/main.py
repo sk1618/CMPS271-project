@@ -8,13 +8,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import SessionLocal, engine, Base
 from models import User
 from schemas import UserCreate, UserLogin
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:5500"],  # Allow frontend requests
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,7 +25,7 @@ app.add_middleware(
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-SECRET_KEY = os.urandom(32)
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")  
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -73,14 +76,14 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
 
 @app.post("/login/")
 def login(user: UserLogin, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.username == user.username).first()
+    db_user = db.query(User).filter(User.email == user.username).first()  # Login with email
 
     if not db_user or not pwd_context.verify(user.password, db_user.password_hash):
-        raise HTTPException(status_code=401, detail="Invalid username or password")
+        raise HTTPException(status_code=401, detail="Invalid email or password")
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": db_user.username}, expires_delta=access_token_expires
+        data={"sub": db_user.email}, expires_delta=access_token_expires
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
@@ -88,4 +91,3 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 @app.get("/protected/")
 def protected_route(username: str = Depends(get_current_user)):
     return {"message": f"Welcome {username}, you have accessed a protected route!"}
-

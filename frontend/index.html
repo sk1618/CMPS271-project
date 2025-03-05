@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finoria</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="homePageStyle.css" />
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="homePage.html" class="logo">Finoria</a>
+            <ul class="nav-links">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Transactions</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="signIn.html" id="signIn">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="homepage-content">
+        <!-- Logout Success Message -->
+        <div id="logout-message" style="display: none;">
+            <h1>Logout Successful!</h1>
+            <p>You have been logged out. Redirecting to the homepage...</p>
+        </div>
+        <h1>Welcome, <span id="username">User</span>!</h1>
+        <p>Your financial journey starts here.</p>
+        <div class="quick-actions">
+            <a href="#" class="action-btn">Add Transaction</a>
+            <a href="#" class="action-btn">View Reports</a>
+        </div>
+    </section>
+    <script src="components/logout.js"></script>
+</body>
+
+</html>

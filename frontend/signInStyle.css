@@ -31,12 +31,15 @@ body {
 
 .wrapper {
     position: relative;
-    width: 400px;
-    height: 500px;
+    width: auto;
+    min-width: 300px;
+    max-width: 500px;
     background: rgba(255, 255, 255, 0.7);
     border-radius: 20px;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
     padding: 40px;
+    margin: 20px;
+    display: inline-block;
 }
 
 .former-wrapper {
@@ -86,8 +89,8 @@ h2 {
     box-sizing: border-box;
 }
 
-.input-group input:focus ~ label,
-.input-group input:valid ~ label {
+.input-group input:focus~label,
+.input-group input:valid~label {
     top: -5px;
 }
 
@@ -125,12 +128,15 @@ button {
 
 .signup-link p {
     color: black;
+    margin: 0;
 }
 
 .signup-link p a {
     color: blue;
     text-decoration: none;
     font-weight: 500;
+    display: block;
+    margin-top: 10px;
 }
 
 .signup-link p a:hover {
