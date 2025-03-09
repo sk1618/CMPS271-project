@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finoria.com</title>
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4; /* Optional: Add a background color */
+       }
+        .bloc-container {
+            display: flex;
+            gap: 50px;
+            width: 1200px;
+            margin-left: 150px;
+        }
+        .bloc1 {
+            width: 350px;
+            padding: 20px;
+            border-style: dashed;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .Create-budget {
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: Roboto, Verdana, Arial;
+        }
+        .title-name {
+            margin-left: 0px;
+            margin-bottom: 3px;
+            font-weight: bold;
+            font-size: 13px;
+            font-family: Roboto, Verdana, Arial;
+        }
+        .groceries {
+            margin-top: 2px;
+            width: 250px;
+            display: block;
+        }
+        .budget-creation {
+            display: block;
+            margin-top: 15px;
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            box-shadow: 3px 4px 5px rgba(0,0,0,0.20);
+        }
+        .budget-creation:hover, .details-button:hover{
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease;
+        }
+        .buget-creation:hover{
+            background-color: #333;
+        }
+        .budget-creation:active {
+            background-color: #444;
+            color: white;
+            transform: scale(0.98);
+            box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .created-budget {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 370px;
+            font-family: Arial, sans-serif;
+            display: inline-block;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .Budget-name-newdiv, .Budget-amount-newdiv {
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 0px;
+        }
+        .Budget-name-newdiv{
+            margin-right: 50px;
+        }
+
+        /* Styling for the category dropdown */
+        .category-select {
+            margin-top: 10px;
+            width: 250px;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .popup-message {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup-message.show {
+            display: block;
+        }
+
+        .Add-title {
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 0px;
+        }
+        .st-title {
+            margin-right: 95px;
+        }
+        .st-input {
+            margin-right: 19px;
+            margin-top: 2px;
+        }
+        .nd-input {
+            width:150px;
+        }
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            display:block;
+        }.empty{
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        .spent{
+            font-size: 10px;
+            margin: 0;
+            display: inline-block;
+        }
+        .spent-first{
+            margin-right: 200px;
+        }
+        progress {
+        width: 78%;
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        }   
+        .progress-bar-container {
+        width: 100%;
+        height: 10px;
+        background-color: lightgray;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-top: 5px;
+       }
+
+    .progress-bar {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 0%;
+        background-color: green;
+        transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+    }
+    .Existing{
+        margin-left: 100px;
+        Font-weight: bold;
+        font-size: 40px;
+    }
+    .bloc3{
+        margin-left: 140px;
+    }
+    .button-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        text-align: center;
+        width: 100%;
+    }
+    .details-button {
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 110px;
+    }
+    .budget-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+
+
+    
+        
+
+    </style>
+</head>
+<body>
+    <!-- Popup message -->
+    <div id="popup-message" class="popup-message">
+        Budget created or Expense added!
+    </div>
+    <div>
+        <p class="Existing">Welcome back</p>
+    </div>
+
+    <div class="bloc-container">
+        <div class="bloc1">
+            <p class="Create-budget">Create Budget</p>
+            <p class="title-name">Budget Name</p>
+            <input class="groceries js-1st-input" type="text" placeholder="Budget Name">
+            <p class="title-name">Amount</p>
+            <input class="groceries js-2nd-input" type="text" placeholder="cost in $">
+            <button class="budget-creation" onclick="BdgetCreation()">Create Budget 💵</button>
+        </div>
+
+        <div class="bloc1">
+            <p class="Create-budget">Add New Expense </p>
+            <p class="Add-title st-title">Expense Name</p>
+            <p class="Add-title">Amount</p>
+            <p class="empty"></p>
+            <input class="st-input" type="text" placeholder="what did you spend on">
+            <input class="nd-input" type="text" placeholder="cost in $">
+            <p class="title-name">Budget Category</p>
+
+            <select class="category-select" id="category-select">
+                <option value="" disabled selected>Select a Budget Category</option>
+            </select>
+            <button class="budget-creation" onclick="AddExpense()">Add Expense 💳</button>
+        </div>
+    </div>
+    <p class="Existing">Existing Budgets</p>
+    <div class="bloc3">
+        <div id="created-budgets">
+        </div>
+    </div>
+    
+
+    <script>
+        const budgetNames = []; // Array to store created budget names
+        const budgets = {}; // Object to store budgets with their amounts and expenses
+
+        function BdgetCreation() {
+    let name = document.querySelector(".js-1st-input").value;
+    let amount = parseFloat(document.querySelector(".js-2nd-input").value);
+
+    if (!name || isNaN(amount) || amount <= 0) {
+        alert("Please fill in valid budget name and amount.");
+        return;
+    }
+
+    budgetNames.push(name);
+    budgets[name] = { amount: amount, expenses: 0 };
+
+    let randomColor = getRandomColor();
+
+    let newBudgetDiv = document.createElement("div");
+    newBudgetDiv.classList.add("created-budget");
+    newBudgetDiv.style.border = `2px solid ${randomColor}`;
+    newBudgetDiv.style.color = randomColor;
+
+    newBudgetDiv.innerHTML = `
+    <div class = "budget-header">
+         <p class="Budget-name-newdiv" data-budget-name="${name}"><strong>${name}</strong></p>
+        <p class="Budget-amount-newdiv"><strong>$${amount} Budgeted</strong></p>
+        </div>
+       
+        <div class="progress-container">
+            <strong>Progress:</strong>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="background-color: lightgray;">
+                    <div class="progress-fill" style="width: 0%; background-color: green;"></div>
+                </div>
+            </div>
+            <div class ="contain">
+                <div class = "budget-header">
+                    <p class="spent spent-first"><strong>Remaining: </strong> $${amount}</p>
+                </div>
+                
+                <div class="button-container">
+                    </div>
+                 <button class="details-button" style="background-color: ${randomColor};" onclick="viewDetails('${name}')"><strong>View Details 💸</strong></button>
+
+            </div>
+        </div>
+    `;
+
+    document.querySelector("#created-budgets").appendChild(newBudgetDiv);
+
+    updateCategoryDropdown();
+    showPopup("Budget Created!");
+}
+
+
+        function updateCategoryDropdown() {
+            const dropdown = document.querySelector("#category-select");
+            dropdown.innerHTML = '<option value="" disabled selected>Select a Budget Category</option>'; 
+            budgetNames.forEach((name) => {
+                let option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                dropdown.appendChild(option);
+            });
+        }
+    function AddExpense() {
+        let expenseName = document.querySelector(".st-input").value;
+        let expenseAmount = parseFloat(document.querySelector(".nd-input").value);
+        let selectedCategory = document.querySelector("#category-select").value;
+
+        if (!expenseName || isNaN(expenseAmount) || expenseAmount <= 0 || !selectedCategory) {
+            alert("Please fill in valid expense details and select a category.");
+            return;
+        }
+
+        
+        if (!budgets[selectedCategory].expenseList) {
+            budgets[selectedCategory].expenseList = [];
+        }
+        budgets[selectedCategory].expenseList.push({ name: expenseName, amount: expenseAmount });
+
+        budgets[selectedCategory].expenses += expenseAmount;
+
+        const spentAmount = budgets[selectedCategory].expenses;
+        const totalBudget = budgets[selectedCategory].amount;
+        const remainingAmount = totalBudget - spentAmount;
+
+        const budgetDiv = document.querySelector(`.created-budget .Budget-name-newdiv[data-budget-name="${selectedCategory}"]`).closest(".created-budget");
+
+        // Update spent and remaining amounts
+        budgetDiv.querySelector(".spent-first").textContent = `Spent: $${spentAmount}`;
+        budgetDiv.querySelector(".spent").textContent = `Remaining: $${remainingAmount}`;
+
+        // Update progress bar
+        const progressBarFill = budgetDiv.querySelector(".progress-fill");
+        let percentage = (spentAmount / totalBudget) * 100;
+        progressBarFill.style.width = `${percentage}%`;
+
+        // Change progress bar color based on percentage
+        if (percentage < 50) {
+            progressBarFill.style.backgroundColor = "green";
+        } else if (percentage >= 50 && percentage < 65) {
+            progressBarFill.style.backgroundColor = "yellow";
+            alert(`You're halfway through your budget! in ${selectedCategory}`);
+        } else if(percentage >= 65 && percentage < 85){
+            progressBarFill.style.backgroundColor = "yellow";
+            alert(`Warning! Your budget is getting low in ${selectedCategory}`);
+        }else if(percentage >= 85 && percentage < 100){
+            progressBarFill.style.backgroundColor = "red";
+            alert(`Pay attention. You are almost out of budget! ${selectedCategory}`);
+        }else{
+            alert(`You're over budget! ${selectedCategory}`);
+        }
+
+        showPopup("Expense Added!");
+    }
+    function viewDetails(budgetName) {
+    if (!budgets[budgetName] || !budgets[budgetName].expenseList || budgets[budgetName].expenseList.length === 0) {
+        alert(`No expenses recorded for ${budgetName} yet.`);
+        return;
+    }
+
+    let expenseDetails = `Expenses for ${budgetName}:\n`;
+    budgets[budgetName].expenseList.forEach(expense => {
+        expenseDetails += `- ${expense.name}: $${expense.amount}\n`;
+    });
+
+    alert(expenseDetails);
+}
+
+
+
+        function showPopup(message) {
+            const popup = document.getElementById("popup-message");
+            popup.textContent = message;
+            popup.classList.add("show");
+
+            // Hide the popup after 3 seconds
+            setTimeout(() => {
+                popup.classList.remove("show");
+            }, 3000);
+        }
+
+        function getRandomColor() {
+            let letters = "0123456789ABCDEF";
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+</html>
