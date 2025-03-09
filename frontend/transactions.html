@@ -1,46 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Transactions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="homePageStyle.css" />
+    <link rel="stylesheet" type="text/css" href="transactions.css" />
 </head>
+
 <body>
-    <h1>Transactions</h1>
-    
-    <h2>Add a Transaction</h2>
-    <!-- Form for adding a transaction -->
-    <form id="addTransactionForm">
-        <label for="name">Transaction Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+    <header>
+        <nav>
+            <a href="homePage.html" class="logo">Finoria</a>
+            <ul class="nav-links">
+                <li><a href="homePage.html">Dashboard</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="signIn.html" id="signIn">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" required><br><br>
+    <section class="homepage-content">
+        <h1>Transactions</h1>
 
-        <button type="button" id="addTransaction">Add Transaction</button>
-    </form>
+        <h2>Add a Transaction</h2>
+        <!-- Form for adding a transaction -->
+        <form id="addTransactionForm">
+            <label for="name">Transaction Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
 
-    <h2>Delete a Transaction</h2>
-    <!-- Input for deleting a transaction by ID -->
-    <label for="transactionId">Transaction ID to delete:</label>
-    <input type="number" id="transactionId" name="transactionId"><br><br>
-    <button type="button" id="deleteTransaction">Delete Transaction</button>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required><br><br>
 
-    <h2>All Transactions</h2>
-    <!-- Table to display transactions -->
-    <table id="transactionsTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+            <button type="button" id="addTransaction">Add Transaction</button>
+        </form>
+
+        <h2>All Transactions</h2>
+        <!-- Container to display transactions as blocks -->
+        <div class="transactions-container" id="transactionsContainer">
             <!-- Transactions will be populated here -->
-        </tbody>
-    </table>
+        </div>
+    </section>
 
     <script>
         // Function to fetch and display all transactions
@@ -48,23 +53,23 @@
             fetch('http://127.0.0.1:8000/transactions')
             .then(response => response.json())
             .then(data => {
-                const transactionsTable = document.getElementById("transactionsTable").getElementsByTagName('tbody')[0];
-                transactionsTable.innerHTML = ''; // Clear the table before adding new data
-                
+                const transactionsContainer = document.getElementById("transactionsContainer");
+                transactionsContainer.innerHTML = ''; // Clear the container before adding new data
+
                 data.transactions.forEach(transaction => {
-                    const row = transactionsTable.insertRow();
-                    row.insertCell(0).textContent = transaction.id;
-                    row.insertCell(1).textContent = transaction.name;
-                    row.insertCell(2).textContent = transaction.amount;
-                    const actionsCell = row.insertCell(3);
-                    
-                    // Delete button for each transaction
-                    const deleteButton = document.createElement("button");
-                    deleteButton.textContent = "Delete";
-                    deleteButton.onclick = function() {
-                        deleteTransaction(transaction.id);
-                    };
-                    actionsCell.appendChild(deleteButton);
+                    // Create the transaction block
+                    const transactionBlock = document.createElement("div");
+                    transactionBlock.className = "transaction-block";
+
+                    // Create the content of the block (removed ID)
+                    transactionBlock.innerHTML = `
+                        <h3>${transaction.name}</h3>
+                        <p>Amount: $${transaction.amount}</p>
+                        <button onclick="deleteTransaction(${transaction.id})">Delete</button>
+                    `;
+
+                    // Append the block to the container
+                    transactionsContainer.appendChild(transactionBlock);
                 });
             })
             .catch(error => {
@@ -129,5 +134,7 @@
         // Initial load of transactions when the page is loaded
         window.onload = loadTransactions;
     </script>
+
 </body>
+
 </html>
