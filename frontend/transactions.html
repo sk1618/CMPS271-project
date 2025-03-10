@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="homePageStyle.css" />
     <link rel="stylesheet" type="text/css" href="transactions.css" />
+    
 </head>
 
 <body>
@@ -45,40 +46,56 @@
         <div class="transactions-container" id="transactionsContainer">
             <!-- Transactions will be populated here -->
         </div>
+
+        <!-- Total Transactions Section -->
+        <div class="total-transaction" id="totalTransaction">
+            <p>Total Transaction Amount: $<span id="totalAmount">0</span></p>
+            <div class="spectrum">
+                <div class="spectrum-bar" id="spectrumBar"></div>
+            </div>
+        </div>
     </section>
 
     <script>
         // Function to fetch and display all transactions
         function loadTransactions() {
             fetch('http://127.0.0.1:8000/transactions')
-            .then(response => response.json())
-            .then(data => {
-                const transactionsContainer = document.getElementById("transactionsContainer");
-                transactionsContainer.innerHTML = ''; // Clear the container before adding new data
+                .then(response => response.json())
+                .then(data => {
+                    const transactionsContainer = document.getElementById("transactionsContainer");
+                    transactionsContainer.innerHTML = ''; // Clear the container before adding new data
 
-                data.transactions.forEach(transaction => {
-                    // Create the transaction block
-                    const transactionBlock = document.createElement("div");
-                    transactionBlock.className = "transaction-block";
+                    let totalAmount = 0; // To track the total transaction amount
 
-                    // Create the content of the block (removed ID)
-                    transactionBlock.innerHTML = `
-                        <h3>${transaction.name}</h3>
-                        <p>Amount: $${transaction.amount}</p>
-                        <button onclick="deleteTransaction(${transaction.id})">Delete</button>
-                    `;
+                    data.transactions.forEach(transaction => {
+                        // Create the transaction block
+                        const transactionBlock = document.createElement("div");
+                        transactionBlock.className = "transaction-block";
 
-                    // Append the block to the container
-                    transactionsContainer.appendChild(transactionBlock);
+                        // Create the content of the block (removed ID)
+                        transactionBlock.innerHTML = `
+                            <h3>${transaction.name}</h3>
+                            <p>Amount: $${transaction.amount}</p>
+                            <button onclick="deleteTransaction(${transaction.id})">Delete</button>
+                        `;
+
+                        // Append the block to the container
+                        transactionsContainer.appendChild(transactionBlock);
+
+                        // Add to total amount
+                        totalAmount += transaction.amount;
+                    });
+
+                    // Update the total amount and the spectrum bar
+                    updateTotalAmount(totalAmount);
+                })
+                .catch(error => {
+                    console.error('Error fetching transactions:', error);
                 });
-            })
-            .catch(error => {
-                console.error('Error fetching transactions:', error);
-            });
         }
 
         // Add Transaction Button
-        document.getElementById("addTransaction").addEventListener("click", function() {
+        document.getElementById("addTransaction").addEventListener("click", function () {
             const name = document.getElementById("name").value;
             const amount = document.getElementById("amount").value;
 
@@ -100,18 +117,18 @@
                 },
                 body: JSON.stringify(transactionData)
             })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                // Optionally clear the form after success
-                document.getElementById("addTransactionForm").reset();
-                // Reload transactions to show the updated list
-                loadTransactions();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error adding the transaction.');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    // Optionally clear the form after success
+                    document.getElementById("addTransactionForm").reset();
+                    // Reload transactions to show the updated list
+                    loadTransactions();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error adding the transaction.');
+                });
         });
 
         // Delete Transaction Button (Delete specific transaction by ID)
@@ -119,22 +136,31 @@
             fetch(`http://127.0.0.1:8000/delete_transaction/${transactionId}`, {
                 method: 'DELETE',
             })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                // Reload transactions to show the updated list
-                loadTransactions();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error deleting the transaction.');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    // Reload transactions to show the updated list
+                    loadTransactions();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error deleting the transaction.');
+                });
+        }
+
+        // Function to update the total transaction amount and the spectrum bar
+        function updateTotalAmount(totalAmount) {
+            document.getElementById("totalAmount").textContent = totalAmount;
+
+            // Update the spectrum bar width
+            const spectrumBar = document.getElementById("spectrumBar");
+            const percentage = totalAmount < 0 ? 0 : (totalAmount > 1000 ? 100 : (totalAmount / 1000) * 100);
+            spectrumBar.style.width = percentage + "%";
         }
 
         // Initial load of transactions when the page is loaded
         window.onload = loadTransactions;
     </script>
-
 </body>
 
 </html>
