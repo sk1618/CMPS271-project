@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="inventory.css" />
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="homePage.html" class="logo">Finoria</a>
+            <ul class="nav-links">
+                <li><a href="homePage.html">Dashboard</a></li>
+                <li><a href="transactions.html">Transactions</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="signIn.html" id="signIn">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="homepage-content">
+        <h1>Inventory</h1>
+
+        <h2>Add a Category</h2>
+        <form id="addCategoryForm">
+            <label for="category_name">Category Name:</label>
+            <input type="text" id="category_name" name="name" required><br><br>
+            <button type="button" id="addCategory">Add Category</button>
+        </form>
+
+        <h2>Categories</h2>
+        <div id="categoriesContainer">
+            <!-- Categories will be populated here -->
+        </div>
+
+        <div id="categoryItemsContainer" style="display: none;">
+            <h2>Items in Category: <span id="categoryTitle"></span></h2>
+            
+            <!-- Add item form will be visible here -->
+            <form id="addItemForm">
+                <label for="item_name">Item Name:</label>
+                <input type="text" id="item_name" name="name" required><br><br>
+                <button type="button" id="addItem">Add Item</button>
+            </form>
+
+            <!-- List of items will be shown here -->
+            <div id="categoryItems"></div>
+        </div>
+    </section>
+
+    <script>
+        // Fetch and display categories
+        function loadCategories() {
+            fetch('http://127.0.0.1:8000/categories/')
+                .then(response => response.json())
+                .then(data => {
+                    const categoriesContainer = document.getElementById('categoriesContainer');
+                    categoriesContainer.innerHTML = '';
+                    data.categories.forEach(category => {
+                        const categoryElement = document.createElement('div');
+                        categoryElement.className = 'category-block';
+                        categoryElement.innerHTML = `
+                            <h3>${category.name}</h3>
+                            <button onclick="viewCategoryItems(${category.id}, '${category.name}')">View Items</button>
+                        `;
+                        categoriesContainer.appendChild(categoryElement);
+                    });
+                });
+        }
+
+        // View category items
+        function viewCategoryItems(categoryId, categoryName) {
+            document.getElementById('categoryItemsContainer').style.display = 'block';
+            document.getElementById('categoryTitle').textContent = categoryName;
+
+            // Store the current category ID to use when adding items
+            window.currentCategoryId = categoryId;
+
+            // Fetch and display items in this category
+            fetch(`http://127.0.0.1:8000/category/${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const categoryItems = document.getElementById('categoryItems');
+                    categoryItems.innerHTML = ''; // Clear any previous items
+                    data.items.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'item-block';
+                        itemElement.innerHTML = `<p>${item.name}</p>`;
+                        categoryItems.appendChild(itemElement);
+                    });
+                });
+        }
+
+        // Add category
+        document.getElementById('addCategory').addEventListener('click', function() {
+            const name = document.getElementById('category_name').value;
+
+            if (!name) {
+                alert('Please provide a category name.');
+                return;
+            }
+
+            const categoryData = { name };
+
+            fetch('http://127.0.0.1:8000/add_category/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(categoryData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    loadCategories(); // Reload the categories list
+                    document.getElementById('addCategoryForm').reset(); // Reset form
+                });
+        });
+
+        // Add item
+        document.getElementById('addItem').addEventListener('click', function() {
+            const name = document.getElementById('item_name').value;
+            const categoryId = window.currentCategoryId; // Use the stored category ID
+
+            if (!name) {
+                alert('Please provide an item name.');
+                return;
+            }
+
+            if (!categoryId) {
+                alert('Please select a category first.');
+                return;
+            }
+
+            const itemData = {
+                name,
+                category_id: categoryId // Pass the correct category ID here
+            };
+
+            fetch('http://127.0.0.1:8000/add_item/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(itemData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    viewCategoryItems(categoryId, document.getElementById('categoryTitle').textContent); // Refresh items
+                    document.getElementById('addItemForm').reset(); // Reset item input
+                });
+        });
+
+        // Initial category load
+        window.onload = loadCategories;
+    </script>
+</body>
+</html>
