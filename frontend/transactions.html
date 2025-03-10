@@ -52,10 +52,8 @@
             <p>Total Transaction Amount: $<span id="totalAmount">0</span></p>
             <div class="spectrum">
                 <div class="spectrum-bar" id="spectrumBar"></div>
-                <div class="spectrum-marker" id="spectrumMarker"></div> <!-- The moving marker -->
             </div>
         </div>
-        
     </section>
 
     <script>
@@ -151,20 +149,14 @@
         }
 
         // Function to update the total transaction amount and the spectrum bar
-        // Function to update the total transaction amount and the spectrum bar
-function updateTotalAmount(totalAmount) {
-    document.getElementById("totalAmount").textContent = totalAmount;
+        function updateTotalAmount(totalAmount) {
+            document.getElementById("totalAmount").textContent = totalAmount;
 
-    // Update the spectrum bar width (1000 is the maximum value for totalAmount)
-    const spectrumBar = document.getElementById("spectrumBar");
-    const percentage = totalAmount < 0 ? 0 : (totalAmount > 1000 ? 100 : (totalAmount / 1000) * 100);
-    spectrumBar.style.width = percentage + "%";
-
-    // Move the marker depending on the total amount (position is based on percentage)
-    const spectrumMarker = document.getElementById("spectrumMarker");
-    spectrumMarker.style.left = percentage + "%";
-}
-
+            // Update the spectrum bar width
+            const spectrumBar = document.getElementById("spectrumBar");
+            const percentage = totalAmount < 0 ? 0 : (totalAmount > 1000 ? 100 : (totalAmount / 1000) * 100);
+            spectrumBar.style.width = percentage + "%";
+        }
 
         // Initial load of transactions when the page is loaded
         window.onload = loadTransactions;
