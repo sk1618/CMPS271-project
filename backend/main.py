@@ -168,3 +168,60 @@ async def view_inventory(request: Request, db: Session = Depends(get_db)):
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+@app.post("/signup")
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    # 1) Check if a user with the same username or email already exists
+    existing_username = db.query(User).filter(User.username == user.username).first()
+    if existing_username:
+        raise HTTPException(status_code=400, detail="Username already registered.")
+    
+    existing_email = db.query(User).filter(User.email == user.email).first()
+    if existing_email:
+        raise HTTPException(status_code=400, detail="Email already registered.")
+
+    # 2) Hash the user’s password
+    hashed_password = get_password_hash(user.password)
+
+    # 3) Create the User DB object
+    db_user = User(
+        username=user.username,
+        email=user.email,
+        password_hash=hashed_password
+    )
+
+    # 4) Save to DB
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+
+    return {"message": "User created successfully"}
+#           SIGN IN
+@app.post("/login")
+def login_user(login_data: UserLogin, db: Session = Depends(get_db)):
+    # 1) Get user by username
+    user = db.query(User).filter(User.username == login_data.username).first()
+
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid username or password.")
+    
+    # 2) Verify password
+    if not verify_password(login_data.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Invalid username or password.")
+
+    # 3) If successful, you might want to return a token or just success
+    return {"message": "Login successful!"}
