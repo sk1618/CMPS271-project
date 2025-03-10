@@ -3,8 +3,11 @@
 # Step 2: Create a virtual environment (if not already created)
 python -m venv env
 
+eza aa coputer l jem3a run this before Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
 # Step 3: Activate the virtual environment
 .\env\Scripts\activate  (windows)
+
 
 # Step 4: Install all necessary packages
 pip install -r requirements.txt
