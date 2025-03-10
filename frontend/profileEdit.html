@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finoria - Edit Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="profileStyle.css" />
+    <link rel="stylesheet" type="text/css" href="profileEdit.css" />
+    
+</head>
+
+<body>
+    <header>
+        <a href="homePage.html" class="logo">Finoria</a>
+    </header>
+
+    <section class="profile-content">
+        <h1>Edit Your Profile</h1>
+
+        <!-- Profile form to edit -->
+        <form id="editProfileForm">
+            <div class="form-group">
+                <label for="edit-name">Full Name:</label>
+                <input type="text" id="edit-name" placeholder="Enter your full name" />
+            </div>
+
+            <div class="form-group">
+                <label for="edit-email">Email:</label>
+                <input type="email" id="edit-email" placeholder="Enter your email address" />
+            </div>
+
+            <div class="form-group">
+                <label for="edit-phone">Phone Number:</label>
+                <input type="tel" id="edit-phone" placeholder="Enter your phone number" />
+            </div>
+
+            <div class="form-group">
+                <label for="edit-address">Address:</label>
+                <textarea id="edit-address" placeholder="Enter your address"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-bio">Bio:</label>
+                <textarea id="edit-bio" placeholder="Write a brief bio about yourself"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-type">Account Type:</label>
+                <select id="edit-type">
+                    <option value="Premium">Premium</option>
+                    <option value="Basic">Basic</option>
+                    <option value="Standard">Standard</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-profile-picture">Profile Picture:</label>
+                <input type="file" id="edit-profile-picture" accept="image/*" />
+            </div>
+
+            <button type="submit" class="action-btn">Save Changes</button>
+        </form>
+
+        <div class="form-footer">
+            <a href="profile.html">Back to Profile</a>
+        </div>
+    </section>
+
+    <script>
+        // Retrieve existing user data from localStorage (if any)
+        document.getElementById("edit-name").value = localStorage.getItem("username") || "John Doe";
+        document.getElementById("edit-email").value = localStorage.getItem("email") || "johndoe@example.com";
+        document.getElementById("edit-phone").value = localStorage.getItem("phone") || "";
+        document.getElementById("edit-address").value = localStorage.getItem("address") || "";
+        document.getElementById("edit-bio").value = localStorage.getItem("bio") || "";
+        document.getElementById("edit-type").value = localStorage.getItem("accountType") || "Premium";
+
+        // Handle form submission to save data to localStorage
+        document.getElementById("editProfileForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get values from form fields
+            const name = document.getElementById("edit-name").value;
+            const email = document.getElementById("edit-email").value;
+            const phone = document.getElementById("edit-phone").value;
+            const address = document.getElementById("edit-address").value;
+            const bio = document.getElementById("edit-bio").value;
+            const accountType = document.getElementById("edit-type").value;
+            const profilePicture = document.getElementById("edit-profile-picture").files[0];
+
+            // Save data to localStorage
+            localStorage.setItem("username", name);
+            localStorage.setItem("email", email);
+            localStorage.setItem("phone", phone);
+            localStorage.setItem("address", address);
+            localStorage.setItem("bio", bio);
+            localStorage.setItem("accountType", accountType);
+
+            if (profilePicture) {
+                // You can save the profile picture to localStorage, but it's better to upload it to a server
+                // For simplicity, we'll store it temporarily in localStorage (base64)
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    localStorage.setItem("profilePicture", reader.result);
+                };
+                reader.readAsDataURL(profilePicture);
+            }
+
+            // Redirect back to profile page after saving
+            window.location.href = "profile.html";
+        });
+    </script>
+</body>
+
+</html>
