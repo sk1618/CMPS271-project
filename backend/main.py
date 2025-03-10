@@ -1,6 +1,5 @@
 import os
 from datetime import datetime, timedelta
-
 from fastapi import FastAPI, Depends, HTTPException, Security, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
@@ -8,9 +7,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker, relationship, Session
 from dotenv import load_dotenv
 import uvicorn
 
@@ -25,19 +24,24 @@ Base = declarative_base()
 
 # Database Models
 
-# User model (for authentication)
-class User(Base):
-    __tablename__ = "users"
+# Category model
+class Category(Base):
+    __tablename__ = "categories"
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password_hash = Column(String)
+    name = Column(String, index=True)
 
-# Item model (example)
+    items = relationship("Item", back_populates="category")
+
+
+# Item model
 class Item(Base):
     __tablename__ = "items"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    category_id = Column(Integer, ForeignKey("categories.id"))
+
+    category = relationship("Category", back_populates="items")
+
 
 # Transaction model
 class Transaction(Base):
@@ -45,6 +49,7 @@ class Transaction(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     amount = Column(Integer)
+
 
 # Create all tables
 Base.metadata.create_all(bind=engine)
@@ -64,13 +69,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Authentication configuration
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
 # Dependency to get the database session
 def get_db():
     db = SessionLocal()
@@ -79,79 +77,18 @@ def get_db():
     finally:
         db.close()
 
-# Utility functions for JWT
-def create_access_token(data: dict, expires_delta: timedelta):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + expires_delta
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-def get_current_user(token: str = Security(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
-        return username
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-
 # Pydantic models for request validation
-class UserCreate(BaseModel):
-    username: str
-    email: str
-    password: str
+class CategoryCreate(BaseModel):
+    name: str
 
-class UserLogin(BaseModel):
-    username: str  # For login via email, adjust accordingly
-    password: str
+class ItemCreate(BaseModel):
+    name: str
+    category_id: int
 
 class TransactionCreate(BaseModel):
     name: str
     amount: int
 
-class ItemCreate(BaseModel):
-    name: str
-
-# Authentication Endpoints
-@app.post("/signup/")
-def signup(user: UserCreate, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(
-        (User.username == user.username) | (User.email == user.email)
-    ).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Username or email already exists")
-    hashed_password = pwd_context.hash(user.password)
-    new_user = User(username=user.username, email=user.email, password_hash=hashed_password)
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return {"message": "User created successfully"}
-
-@app.post("/login/")
-def login(user: UserLogin, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.email == user.username).first()  # Login with email
-    if not db_user or not pwd_context.verify(user.password, db_user.password_hash):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": db_user.email}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
-
-@app.get("/protected/")
-def protected_route(username: str = Depends(get_current_user)):
-    return {"message": f"Welcome {username}, you have accessed a protected route!"}
-
-# Item Endpoint
-@app.post("/add_item/")
-async def add_item(item: ItemCreate, db: Session = Depends(get_db)):
-    db_item = Item(name=item.name)
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return {"message": f"Item '{db_item.name}' added successfully!"}
 
 # Transaction Endpoints
 @app.post("/add_transaction/")
@@ -161,6 +98,7 @@ async def add_transaction(transaction: TransactionCreate, db: Session = Depends(
     db.commit()
     db.refresh(db_transaction)
     return {"message": f"Transaction '{db_transaction.name}' added successfully!"}
+
 
 @app.delete("/delete_transaction/{transaction_id}")
 async def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
@@ -172,16 +110,61 @@ async def delete_transaction(transaction_id: int, db: Session = Depends(get_db))
     else:
         raise HTTPException(status_code=404, detail="Transaction not found.")
 
+
 @app.get("/transactions/")
 async def get_transactions(db: Session = Depends(get_db)):
     transactions = db.query(Transaction).all()
     return {"transactions": transactions}
 
-# Endpoint to render the transactions page from the "frontend" folder
+
+# Category Endpoints
+@app.post("/add_category/")
+async def add_category(category: CategoryCreate, db: Session = Depends(get_db)):
+    db_category = Category(name=category.name)
+    db.add(db_category)
+    db.commit()
+    db.refresh(db_category)
+    return {"message": f"Category '{db_category.name}' added successfully!"}
+
+
+@app.get("/categories/")
+async def get_categories(db: Session = Depends(get_db)):
+    categories = db.query(Category).all()
+    return {"categories": categories}
+
+
+@app.get("/category/{category_id}")
+async def get_category_items(category_id: int, db: Session = Depends(get_db)):
+    category = db.query(Category).filter(Category.id == category_id).first()
+    if category is None:
+        raise HTTPException(status_code=404, detail="Category not found")
+    items = db.query(Item).filter(Item.category_id == category_id).all()
+    return {"category": category, "items": items}
+
+
+@app.post("/add_item/")
+async def add_item(item: ItemCreate, db: Session = Depends(get_db)):
+    db_item = Item(name=item.name, category_id=item.category_id)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return {"message": f"Item '{db_item.name}' added to category!"}
+
+
+# Serve frontend templates
+templates = Jinja2Templates(directory="frontend")
+
+
 @app.get("/view_transactions")
 async def view_transactions(request: Request, db: Session = Depends(get_db)):
     transactions = db.query(Transaction).all()
     return templates.TemplateResponse("transactions.html", {"request": request, "transactions": transactions})
+
+
+@app.get("/view_inventory")
+async def view_inventory(request: Request, db: Session = Depends(get_db)):
+    categories = db.query(Category).all()
+    return templates.TemplateResponse("inventory.html", {"request": request, "categories": categories})
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
