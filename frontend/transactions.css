@@ -144,3 +144,28 @@ button:hover {
     border-radius: 15px;
     transition: width 0.5s ease;
 }
+
+/* Add styles for the spectrum bar */
+.spectrum {
+    width: 100%;
+    height: 20px;
+    background-color: #e0e0e0;
+    position: relative;
+}
+
+.spectrum-bar {
+    width: 0%; /* Start with 0% width */
+    height: 100%;
+    background-color: #4caf50;
+}
+
+.spectrum-marker {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: red; /* Mark the position with a red line */
+    transition: left 0.3s ease; /* Smooth transition for the marker */
+}
+
+
