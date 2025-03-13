@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finoria - Profile</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="profileStyle.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="homePage.html" class="logo">Finoria</a> <!-- Logo as a link to homepage -->
+        <ul class="nav-links">
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="toBuy.html">Purchasing List</a></li>
+          <li><a href="expenses.html" class="transactions-link"></i>Transactions</a></li>
+          <li><a href="#">Reports</a></li>
+          <li><a href="settings.html">Settings</a></li>
+          <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a href="#" id="logout">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="profile-content">
+      <h1>Welcome to your profile, <span id="username">User</span>!</h1>
+      
+      <!-- Profile image and details -->
+      <div class="profile-header">
+        <div class="profile-picture">
+          <img src="profile-picture.jpg" alt="Profile Image" />
+        </div>
+        <div class="profile-details">
+          <p><strong>Name:</strong> <span id="profile-name">John Doe</span></p>
+          <p><strong>Email:</strong> <span id="profile-email">johndoe@example.com</span></p>
+          <p><strong>Account Type:</strong> <span id="profile-type">Premium</span></p>
+        </div>
+      </div>
+      
+      <!-- Profile actions -->
+      <div class="profile-actions">
+        <a href="editProfile.html" class="action-btn">Edit Profile</a>
+        <a href="changePassword.html" class="action-btn">Change Password</a>
+      </div>
+    </section>
+
+    <script>
+      // Check if dark mode is enabled in localStorage and apply it
+      if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+      }
+
+      // Fetch username from localStorage
+      let userName = localStorage.getItem("username") || "Guest";
+      document.getElementById("username").textContent = userName;
+
+      // Example: Dynamically setting user info (you could fetch this from an API or service)
+      document.getElementById("profile-name").textContent = "John Doe"; // Example value
+      document.getElementById("profile-email").textContent = "johndoe@example.com"; // Example value
+      document.getElementById("profile-type").textContent = "Premium"; // Example value
+
+      // Logout functionality
+      document
+        .getElementById("logout")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // Prevent default link behavior
+          localStorage.removeItem("username"); // Clear stored user data
+          window.location.href = "signin.html"; // Redirect to sign-in page
+        });
+    </script>
+  </body>
+</html>

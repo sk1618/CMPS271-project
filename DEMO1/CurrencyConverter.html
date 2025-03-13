@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Convert</title>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  />
+    <link rel="stylesheet" href="./ConverterStyle.css">
+</head>
+<body>
+    <header>
+        <nav>
+          <a href="homePage.html" class="logo">Finoria</a>
+          <ul class="nav-links">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="toBuy.html">Purchasing List</a></li>
+            <li><a href="expenses.html" class="transactions-link">Transactions</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+          </ul>
+        </nav>
+      </header>
+    <div class="container fadeIn">
+        <h1>Currency Converter</h1>
+        <div class="box">
+            <div class="left-box">
+                <select class="from"></select>
+                <input type ="number" class="number">
+            </div>
+            <div class="right-box">
+                <select class="to"></select>
+                <input type ="number" class="result" disabled>
+            </div>
+        </div>
+        <button class="convert">Convert</button>
+    </div>
+    <script src="./converterScript.js"></script>
+</body>
+</html>

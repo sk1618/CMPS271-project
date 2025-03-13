@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finoria-Transactions</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel = "stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+          <a href="homePage.html" class="logo">Finoria</a>
+          <ul class="nav-links">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="toBuy.html">Purchasing List</a></li>
+            <li><a href="expenses.html" class="transactions-link">Transactions</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="#" id="logout">Logout</a></li>
+          </ul>
+        </nav>
+      </header>
+      <div class="currency">
+        <a href="CurrencyConverter.html" class="floating-button">💱 Convert Here!</a>
+    </div>
+    <!-- Popup message -->
+    <div id="popup-message" class="popup-message">
+        Budget created or Expense added!
+    </div>
+    
+
+    <div class="bloc-container fadeIn">
+        <div class="bloc1">
+            <p class="Create-budget">Create Budget</p>
+            <p class="title-name">Budget Name</p>
+            <input class="groceries js-1st-input" type="text" placeholder="Budget Name">
+            <p class="title-name">Amount</p>
+            <input class="groceries js-2nd-input" type="text" placeholder="cost in $">
+            <button class="budget-creation" onclick="BdgetCreation()">Create Budget 💵</button>
+        </div>
+       
+        <div class="bloc1">
+            <p class="Create-budget">Add New Expense </p>
+            <p class="Add-title st-title">Expense Name</p>
+            <p class="Add-title">Amount</p>
+            <p class="empty"></p>
+            <input class="st-input" type="text" placeholder="what did you spend on">
+            <input class="nd-input" type="text" placeholder="cost in $">
+            <p class="title-name">Budget Category</p>
+
+            <select class="category-select" id="category-select">
+                <option value="" disabled selected>Select a Budget Category</option>
+            </select>
+            <button class="budget-creation" onclick="AddExpense()">Add Expense 💳</button>
+        </div>
+    </div>
+    <p class="Existing">Existing Budgets</p>
+    <div class="bloc3">
+        <div id="created-budgets">
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
