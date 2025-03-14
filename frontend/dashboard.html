@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="homePageStyle.css">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    
+        <a href="#" class="logo">Finoria</a>
+        <header>
+            <nav>
+                <a href="homePage.html" class="logo">Finoria</a>
+                <ul class="nav-links">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="transactions.html">Transactions</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#" id="logout">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+    
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <section class="dashboard-grid">
+            <div class="card">
+                <h3>Sales</h3>
+                <p>$1,678.90</p>
+                <canvas id="chart1"></canvas>
+            </div>
+
+            <div class="card">
+                <h3>Stats</h3>
+                <canvas id="chart2"></canvas>
+            </div>
+
+            <div class="card">
+                <h3>Progress</h3>
+                <input type="range" min="0" max="100" value="50">
+            </div>
+
+            <div class="card">
+                <h3>Monthly Data</h3>
+                <canvas id="chart3"></canvas>
+            </div>
+
+            <div class="card">
+                <h3>Calendar</h3>
+                <div class="calendar">
+                    <p>March</p>
+                    <table>
+                        <tr>
+                            <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td>
+                        </tr>
+                        <tr>
+                            <td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let ctx1 = document.getElementById("chart1").getContext("2d");
+            new Chart(ctx1, {
+                type: "line",
+                data: {
+                    labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+                    datasets: [{
+                        label: "Sales",
+                        data: [12, 19, 3, 5, 2],
+                        borderColor: "#007BFF",
+                        fill: false
+                    }]
+                }
+            });
+
+            let ctx2 = document.getElementById("chart2").getContext("2d");
+            new Chart(ctx2, {
+                type: "doughnut",
+                data: {
+                    labels: ["Product A", "Product B", "Product C"],
+                    datasets: [{
+                        data: [30, 40, 30],
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+                    }]
+                }
+            });
+
+            let ctx3 = document.getElementById("chart3").getContext("2d");
+            new Chart(ctx3, {
+                type: "bar",
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+                    datasets: [{
+                        label: "Revenue",
+                        data: [1000, 2000, 1500, 1800, 2100],
+                        backgroundColor: "#8E44AD"
+                    }]
+                }
+            });
+        });
+    </script>
+</body>
+</html>
