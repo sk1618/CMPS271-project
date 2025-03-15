@@ -42,6 +42,10 @@ class Item(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     category_id = Column(Integer, ForeignKey("categories.id"))
+    bought_date = Column(String, default=datetime.now().strftime("%Y-%m-%d"))
+    cost = Column(Integer, default=0)
+    sale_price = Column(Integer, default=0)
+    quantity = Column(Integer, default=1)  # New field for quantity
 
     category = relationship("Category", back_populates="items")
 
@@ -87,6 +91,10 @@ class CategoryCreate(BaseModel):
 class ItemCreate(BaseModel):
     name: str
     category_id: int
+    bought_date: str = datetime.now().strftime("%Y-%m-%d")
+    cost: int = 0
+    sale_price: int = 0
+    quantity: int = 1  # Default value for quantity
 
 class TransactionCreate(BaseModel):
     name: str
@@ -147,12 +155,18 @@ async def get_category_items(category_id: int, db: Session = Depends(get_db)):
 
 @app.post("/add_item/")
 async def add_item(item: ItemCreate, db: Session = Depends(get_db)):
-    db_item = Item(name=item.name, category_id=item.category_id)
+    db_item = Item(
+        name=item.name,
+        category_id=item.category_id,
+        bought_date=item.bought_date,
+        cost=item.cost,
+        sale_price=item.sale_price,
+        quantity=item.quantity  # Save the quantity as well
+    )
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
     return {"message": f"Item '{db_item.name}' added to category!"}
-
 
 # Serve frontend templates
 templates = Jinja2Templates(directory="frontend")
