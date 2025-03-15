@@ -6,6 +6,9 @@
     <title>Inventory</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="inventory.css" />
+    <style>
+       
+    </style>
 </head>
 
 <body>
@@ -29,8 +32,8 @@
         <h2>Add a Category</h2>
         <form id="addCategoryForm">
             <label for="category_name">Category Name:</label>
-            <input type="text" id="category_name" name="name" required><br><br>
-            <button type="button" id="addCategory">Add Category</button>
+            <input type="text" id="category_name" name="name" required>
+            <button type="button" id="addCategory">Add Category</button><br>
         </form>
 
         <h2>Categories</h2>
@@ -38,66 +41,134 @@
             <!-- Categories will be populated here -->
         </div>
 
-        <div id="categoryItemsContainer" style="display: none;">
-            <h2>Items in Category: <span id="categoryTitle"></span></h2>
-            
-            <!-- Add item form will be visible here -->
-            <form id="addItemForm">
-                <label for="item_name">Item Name:</label>
-                <input type="text" id="item_name" name="name" required><br><br>
-                <button type="button" id="addItem">Add Item</button>
-            </form>
+        <!-- Popup for viewing category items -->
+        <div id="popup" class="popup">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <div class="popup-header">
+                <h2>Items in Category: <span id="categoryTitlePopup"></span></h2>
+            </div>
+            <div class="popup-content">
+                <!-- Left Pane - Add Item Form and Items List -->
+                <div id="popupLeft" class="popup-left">
+                    <div class="form-container">
+                        <form id="addItemForm">
+                            <label for="item_name">Item Name:</label>
+                            <input type="text" id="item_name" name="name" required>
+                            <button type="button" id="addItem">Add Item</button><br>
+                        </form>
+                    </div>
+                    <div id="itemList">
+                        <!-- Items will be displayed here -->
+                    </div>
+                </div>
 
-            <!-- List of items will be shown here -->
-            <div id="categoryItems"></div>
+                <!-- Right Pane - Item Information -->
+                <div class="popup-right">
+                    <h3>Item Information</h3>
+                    <div id="itemInfo" class="item-info">
+                        <!-- Item information will be displayed here when an item is clicked -->
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <script>
         // Fetch and display categories
-        function loadCategories() {
-            fetch('http://127.0.0.1:8000/categories/')
-                .then(response => response.json())
-                .then(data => {
-                    const categoriesContainer = document.getElementById('categoriesContainer');
-                    categoriesContainer.innerHTML = '';
-                    data.categories.forEach(category => {
-                        const categoryElement = document.createElement('div');
-                        categoryElement.className = 'category-block';
-                        categoryElement.innerHTML = `
-                            <h3>${category.name}</h3>
-                            <button onclick="viewCategoryItems(${category.id}, '${category.name}')">View Items</button>
-                        `;
-                        categoriesContainer.appendChild(categoryElement);
-                    });
-                });
-        }
+function loadCategories() {
+    fetch('http://127.0.0.1:8000/categories/')
+        .then(response => response.json())
+        .then(data => {
+            const categoriesContainer = document.getElementById('categoriesContainer');
+            categoriesContainer.innerHTML = '';
+            data.categories.forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'category-block';
+                categoryElement.innerHTML = `
+                    <h3>${category.name}</h3>
+                    <button onclick="viewCategoryItems(${category.id}, '${category.name}')">View Items</button>
+                `;
+                categoriesContainer.appendChild(categoryElement);
+            });
+        });
+}
 
-        // View category items
-        function viewCategoryItems(categoryId, categoryName) {
-            document.getElementById('categoryItemsContainer').style.display = 'block';
-            document.getElementById('categoryTitle').textContent = categoryName;
+// View category items in popup
+function viewCategoryItems(categoryId, categoryName) {
+    document.getElementById('categoryTitlePopup').textContent = categoryName;
+    document.getElementById('popup').style.display = 'block';
+    document.getElementById('popup').style.opacity = '1'; // Make the popup visible with transition
+    window.currentCategoryId = categoryId;
 
-            // Store the current category ID to use when adding items
-            window.currentCategoryId = categoryId;
+    // Fetch and display items in this category
+    fetch(`http://127.0.0.1:8000/category/${categoryId}`)
+        .then(response => response.json())
+        .then(data => {
+            const itemList = document.getElementById('itemList');
+            itemList.innerHTML = ''; // Clear previous items
+            data.items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item-block';
+                itemElement.innerHTML = `<p>${item.name}</p>`;
+                itemElement.onclick = () => displayItemInfo(item); // Add click listener to show item details
+                itemList.appendChild(itemElement);
+            });
+        });
+}
 
-            // Fetch and display items in this category
-            fetch(`http://127.0.0.1:8000/category/${categoryId}`)
-                .then(response => response.json())
-                .then(data => {
-                    const categoryItems = document.getElementById('categoryItems');
-                    categoryItems.innerHTML = ''; // Clear any previous items
-                    data.items.forEach(item => {
-                        const itemElement = document.createElement('div');
-                        itemElement.className = 'item-block';
-                        itemElement.innerHTML = `<p>${item.name}</p>`;
-                        categoryItems.appendChild(itemElement);
-                    });
-                });
-        }
+// Display item information on the right pane
+function displayItemInfo(item) {
+    const itemInfo = document.getElementById('itemInfo');
+    itemInfo.innerHTML = `
+        <p><strong>Name:</strong> ${item.name}</p>
+        <p><strong>Description:</strong> ${item.description || 'No description available.'}</p>
+        <p><strong>Price:</strong> $${item.price}</p>
+    `;
+}
 
-        // Add category
-        document.getElementById('addCategory').addEventListener('click', function() {
+// Close popup
+function closePopup() {
+    document.getElementById('popup').style.opacity = '0'; // Fade out the popup
+    setTimeout(() => {
+        document.getElementById('popup').style.display = 'none'; // Hide after fade-out
+    }, 300);
+}
+
+// Add item
+document.getElementById('addItem').addEventListener('click', function() {
+    const name = document.getElementById('item_name').value;
+    const categoryId = window.currentCategoryId; // Use the stored category ID
+
+    if (!name) {
+        alert('Please provide an item name.');
+        return;
+    }
+
+    if (!categoryId) {
+        alert('Please select a category first.');
+        return;
+    }
+
+    const itemData = {
+        name,
+        category_id: categoryId // Pass the correct category ID here
+    };
+
+    fetch('http://127.0.0.1:8000/add_item/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(itemData),
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert('Item added successfully!');
+            document.getElementById('item_name').value = ''; // Clear input
+            loadCategories(); // Reload categories to show the new item
+        });
+});
+
+// Add category
+document.getElementById('addCategory').addEventListener('click', function() {
             const name = document.getElementById('category_name').value;
 
             if (!name) {
@@ -120,41 +191,11 @@
                 });
         });
 
-        // Add item
-        document.getElementById('addItem').addEventListener('click', function() {
-            const name = document.getElementById('item_name').value;
-            const categoryId = window.currentCategoryId; // Use the stored category ID
 
-            if (!name) {
-                alert('Please provide an item name.');
-                return;
-            }
 
-            if (!categoryId) {
-                alert('Please select a category first.');
-                return;
-            }
+// Initialize by loading categories
+window.onload = loadCategories;
 
-            const itemData = {
-                name,
-                category_id: categoryId // Pass the correct category ID here
-            };
-
-            fetch('http://127.0.0.1:8000/add_item/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(itemData),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    viewCategoryItems(categoryId, document.getElementById('categoryTitle').textContent); // Refresh items
-                    document.getElementById('addItemForm').reset(); // Reset item input
-                });
-        });
-
-        // Initial category load
-        window.onload = loadCategories;
     </script>
 </body>
 </html>
