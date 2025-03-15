@@ -11,6 +11,8 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from dotenv import load_dotenv
+from fastapi import HTTPException
+import requests
 import uvicorn
 
 # Load environment variables from .env file if present
@@ -22,6 +24,7 @@ engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
+NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
 # Database Models
 
 # Category model
@@ -168,3 +171,27 @@ async def view_inventory(request: Request, db: Session = Depends(get_db)):
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+# NewsFeed Endpoint
+@app.get("/fetch_stock_news/")
+async def fetch_stock_news(stocks: str):
+    if not NEWSAPI_KEY:
+        raise HTTPException(status_code=500, detail="NewsAPI key not configured.")
+
+    api_url = f"https://newsapi.org/v2/everything?q={stocks}&apiKey={NEWSAPI_KEY}"
+
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        data = response.json()
+
+        # Sort articles by publishedAt in descending order (most recent first)
+        sorted_articles = sorted(data.get("articles", []), key=lambda x: x["publishedAt"], reverse=True)
+
+        # Limit the news items to a maximum of 5
+        max_news_items = 5
+        limited_articles = sorted_articles[:max_news_items]
+
+        return {"articles": limited_articles}
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch news: {str(e)}")

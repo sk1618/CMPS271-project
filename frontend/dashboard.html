@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="homePageStyle.css">
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -69,116 +70,41 @@
                     </table>
                 </div>
             </div>
+
+            <div class="card stock-news-feed">
+                <!-- Widget Header with Gear Icon -->
+                <div class="widget-header">
+                    <h3>Stock News Feed</h3>
+                    <i class="fas fa-cog gear-icon" id="gear-icon"></i>
+                </div>
+            
+                <!-- Phase 1: Stock Selection Modal -->
+                <div id="stock-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h4>Select Stocks</h4>
+                        <ul id="stock-list">
+                            <li><input type="checkbox" id="stock1" name="stock1" value="AAPL"> Apple Inc. (AAPL)</li>
+                            <li><input type="checkbox" id="stock2" name="stock2" value="GOOGL"> Alphabet Inc. (GOOGL)</li>
+                            <li><input type="checkbox" id="stock3" name="stock3" value="MSFT"> Microsoft Corporation (MSFT)</li>
+                            <li><input type="checkbox" id="stock4" name="stock4" value="AMZN"> Amazon.com Inc. (AMZN)</li>
+                            <li><input type="checkbox" id="stock5" name="stock5" value="TSLA"> Tesla Inc. (TSLA)</li>
+                        </ul>
+                        <button id="save-selection">Save Selection</button>
+                    </div>
+                </div>
+            
+                <!-- Phase 2: News Feed -->
+                <div id="news-feed">
+                    <h4>Selected Stocks News</h4>
+                    <ul id="news-items"></ul>
+                    <button id="show-more" style="display: none;">Show More</button>
+                </div>
+            </div>
         </section>
     </div>
 
-    <script>
-       
-    document.addEventListener("DOMContentLoaded", function() {
-        let chart1 = null; // Declare chart1 outside the function to be able to destroy it and create a new one
-        let salesData = []; // This will store the sales data (accumulated sales)
-        let labels = []; // This will store the labels for the x-axis (based on order)
-        let totalAmount = 0; // Track the total sales amount
-
-        // Fetch transactions and update the sales amount
-        loadTransactions();
-
-        // Function to fetch and display all transactions
-        function loadTransactions() {
-            fetch('http://127.0.0.1:8000/transactions')
-                .then(response => response.json())
-                .then(data => {
-                    data.transactions.forEach((transaction, index) => {
-                        // Add the transaction amount to total amount
-                        totalAmount += transaction.amount;
-
-                        // Push the sales data to the salesData array
-                        salesData.push(totalAmount); // We accumulate the total sales
-                        
-                        // Push just the transaction number (1, 2, 3, ...) as the label for the x-axis
-                        labels.push(index + 1); // `index + 1` gives us 1, 2, 3, ...
-
-                        // Update the total sales amount text on the page
-                        document.getElementById("totalSalesAmount").textContent = `$${totalAmount.toFixed(2)}`;
-
-                        // Update the sales chart dynamically
-                        updateSalesChart();
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching transactions:', error);
-                });
-        }
-
-        // Function to update the sales chart with dynamic data
-        function updateSalesChart() {
-            let ctx1 = document.getElementById("chart1").getContext("2d");
-
-            // If the chart already exists, destroy it before creating a new one
-            if (chart1) {
-                chart1.destroy();
-            }
-
-            // Create the chart with updated data
-            chart1 = new Chart(ctx1, {
-                type: "line",
-                data: {
-                    labels: labels, // Labels now are just numbers (1, 2, 3, ...)
-                    datasets: [{
-                        label: "Sales Amount Over Time",
-                        data: salesData, // The sales data accumulates over time
-                        borderColor: "#007BFF",
-                        fill: false,
-                        tension: 0.1 // Smoothens the curve
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Transaction Order'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Sales Amount ($)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Optional additional charts
-        let ctx2 = document.getElementById("chart2").getContext("2d");
-        new Chart(ctx2, {
-            type: "doughnut",
-            data: {
-                labels: ["Product A", "Product B", "Product C"],
-                datasets: [{
-                    data: [30, 40, 30],
-                    backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
-                }]
-            }
-        });
-
-        let ctx3 = document.getElementById("chart3").getContext("2d");
-        new Chart(ctx3, {
-            type: "bar",
-            data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-                datasets: [{
-                    label: "Revenue",
-                    data: [1000, 2000, 1500, 1800, 2100],
-                    backgroundColor: "#8E44AD"
-                }]
-            }
-        });
-    });
-</script>
+    <script src="components/stockNewsFeed.js"></script>
 
   
 </body>
