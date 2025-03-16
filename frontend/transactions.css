@@ -42,24 +42,39 @@ header h1 {
     letter-spacing: 1.5px;
 }
 
-/* Form Container */
-.form-container {
-    width: 100%;
-    max-width: 600px;
+/* Container for side-by-side layout */
+.container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    width: 90%;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+/* Equal Dimensions for Both Columns (Slightly Adjusted Height) */
+.form-container,
+.transaction-list {
+    flex: 1;
+    min-width: 300px;
+    max-width: 45%;
+    height: 450px;  /* Adjusted height to fit content tightly */
     background: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-    margin: 20px auto;
+    overflow-y: auto;
+    
 }
 
+/* Form Container Specifics */
 .form-container h2 {
     margin-bottom: 15px;
     font-size: 24px;
     color: #222;
 }
 
-/* Form Elements */
 .form-container label {
     display: block;
     margin-bottom: 5px;
@@ -89,26 +104,39 @@ header h1 {
     background-color: #0056b3;
 }
 
-/* Transaction List */
-.transaction-list {
-    width: 100%;
-    max-width: 800px;
-    background: rgba(255, 255, 255, 0.9);
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-}
-
+/* Transaction List Specifics */
 .transaction-list h2 {
     margin-bottom: 15px;
     font-size: 24px;
     color: #222;
 }
 
+/* Make the transactions table scrollable */
 .transaction-list table {
     width: 100%;
     border-collapse: collapse;
+     
+}
+
+.transaction-list thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.transaction-list tbody {
+    display: block;
+    max-height: calc(350px - 60px);  /* container height minus header approx */
+    overflow-y: auto;
+    
+   
+}
+
+.transaction-list tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+
 }
 
 .transaction-list th,
