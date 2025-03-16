@@ -1,166 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Transactions</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    <link rel="stylesheet" type="text/css" href="homePageStyle.css" />
-    <link rel="stylesheet" type="text/css" href="transactions.css" />
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            padding: 15px;
+            text-align: center;
+            color: white;
+        }
+        .container {
+            padding: 20px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .transaction-list {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
-
 <body>
-    <header>
-        <nav>
-            <a href="homePage.html" class="logo">Finoria</a>
-            <ul class="nav-links">
-                <li><a href="homePage.html">Dashboard</a></li>
-                <li><a href="transactions.html">Transactions</a></li>
-                <li><a href="#">Reports</a></li>
-                <li><a href="settings.html">Settings</a></li>
-                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="signIn.html" id="signIn">Log In</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <section class="homepage-content">
-        <h1>Transactions</h1>
+<header>
+    <h1>Manage Transactions</h1>
+</header>
 
-        <h2>Add a Transaction</h2>
-        <!-- Form for adding a transaction -->
-        <form id="addTransactionForm">
-            <label for="name">Transaction Name:</label>
-            <input type="text" id="name" name="name" required><br><br>
+<div class="container">
+    <div class="form-container">
+        <h2>Create a Transaction</h2>
+        <form action="/add_transaction/" method="post" id="transactionForm">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                <option value="">Select a Category</option>
+                <!-- Categories will be populated here -->
+            </select>
 
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" required><br><br>
+            <label for="item">Item</label>
+            <select id="item" name="item" required>
+                <option value="">Select an Item</option>
+                <!-- Items will be populated here -->
+            </select>
 
-            <button type="button" id="addTransaction">Add Transaction</button>
+            <label for="transaction_type">Transaction Type</label>
+            <select id="transaction_type" name="transaction_type" required>
+                <option value="buy">Buy</option>
+                <option value="sell">Sell</option>
+                <option value="return">Return</option>
+            </select>
+
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+
+            <button type="submit" class="button">Submit Transaction</button>
         </form>
+    </div>
 
-        <h2>All Transactions</h2>
-        <!-- Container to display transactions as blocks -->
-        <div class="transactions-container" id="transactionsContainer">
-            <!-- Transactions will be populated here -->
-        </div>
+    <div class="transaction-list">
+        <h2>Recent Transactions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Transaction Type</th>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Transactions will be populated here -->
+            </tbody>
+        </table>
+    </div>
+</div>
 
-        <!-- Total Transactions Section -->
-        <div class="total-transaction" id="totalTransaction">
-            <p>Total Transaction Amount: $<span id="totalAmount">0</span></p>
-            <div class="spectrum">
-                <div class="spectrum-bar" id="spectrumBar"></div>
-            </div>
-        </div>
-    </section>
+<script>
+   // Load Categories for the transaction form
+   function loadCategories() {
+       fetch('http://127.0.0.1:8000/categories/')
+           .then(response => response.json())
+           .then(data => {
+               const categorySelect = document.getElementById('category');
+               data.categories.forEach(category => {
+                   const option = document.createElement('option');
+                   option.value = category.id;
+                   option.textContent = category.name;
+                   categorySelect.appendChild(option);
+               });
+           });
+   }
 
-    <script>
-        // Function to fetch and display all transactions
-        function loadTransactions() {
-            fetch('http://127.0.0.1:8000/transactions')
-                .then(response => response.json())
-                .then(data => {
-                    const transactionsContainer = document.getElementById("transactionsContainer");
-                    transactionsContainer.innerHTML = ''; // Clear the container before adding new data
+   // Fetch items when category is selected
+   document.getElementById('category').addEventListener('change', function() {
+       const categoryId = this.value;
+       if (!categoryId) return;
 
-                    let totalAmount = 0; // To track the total transaction amount
+       fetch(`http://127.0.0.1:8000/category/${categoryId}`)
+           .then(response => response.json())
+           .then(data => {
+               const itemSelect = document.getElementById('item');
+               itemSelect.innerHTML = '<option value="">Select an Item</option>'; // Clear previous items
 
-                    data.transactions.forEach(transaction => {
-                        // Create the transaction block
-                        const transactionBlock = document.createElement("div");
-                        transactionBlock.className = "transaction-block";
+               data.items.forEach(item => {
+                   const option = document.createElement('option');
+                   option.value = item.id;
+                   option.textContent = item.name;
+                   itemSelect.appendChild(option);
+               });
+           });
+   });
 
-                        // Create the content of the block (removed ID)
-                        transactionBlock.innerHTML = `
-                            <h3>${transaction.name}</h3>
-                            <p>Amount: $${transaction.amount}</p>
-                            <button onclick="deleteTransaction(${transaction.id})">Delete</button>
-                        `;
+   // Load categories on page load
+   window.onload = loadCategories;
 
-                        // Append the block to the container
-                        transactionsContainer.appendChild(transactionBlock);
+</script>
 
-                        // Add to total amount
-                        totalAmount += transaction.amount;
-                    });
-
-                    // Update the total amount and the spectrum bar
-                    updateTotalAmount(totalAmount);
-                })
-                .catch(error => {
-                    console.error('Error fetching transactions:', error);
-                });
-        }
-
-        // Add Transaction Button
-        document.getElementById("addTransaction").addEventListener("click", function () {
-            const name = document.getElementById("name").value;
-            const amount = document.getElementById("amount").value;
-
-            if (!name || !amount) {
-                alert("Please fill in both fields.");
-                return;
-            }
-
-            const transactionData = {
-                name: name,
-                amount: parseInt(amount)
-            };
-
-            // Send data to backend
-            fetch('http://127.0.0.1:8000/add_transaction/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(transactionData)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    // Optionally clear the form after success
-                    document.getElementById("addTransactionForm").reset();
-                    // Reload transactions to show the updated list
-                    loadTransactions();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error adding the transaction.');
-                });
-        });
-
-        // Delete Transaction Button (Delete specific transaction by ID)
-        function deleteTransaction(transactionId) {
-            fetch(`http://127.0.0.1:8000/delete_transaction/${transactionId}`, {
-                method: 'DELETE',
-            })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    // Reload transactions to show the updated list
-                    loadTransactions();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error deleting the transaction.');
-                });
-        }
-
-        // Function to update the total transaction amount and the spectrum bar
-        function updateTotalAmount(totalAmount) {
-            document.getElementById("totalAmount").textContent = totalAmount;
-
-            // Update the spectrum bar width
-            const spectrumBar = document.getElementById("spectrumBar");
-            const percentage = totalAmount < 0 ? 0 : (totalAmount > 1000 ? 100 : (totalAmount / 1000) * 100);
-            spectrumBar.style.width = percentage + "%";
-        }
-
-        // Initial load of transactions when the page is loaded
-        window.onload = loadTransactions;
-    </script>
 </body>
-
 </html>
