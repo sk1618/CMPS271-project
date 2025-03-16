@@ -16,8 +16,8 @@ import requests
 import uvicorn
 
 # Import our auth routes
-from auth_routes import router as auth_router
-from auth_utils import get_current_user
+from backend.auth_routes import router as auth_router
+from backend.auth_utils import get_current_user
 
 # Load environment variables from .env file if present
 load_dotenv()
@@ -31,7 +31,7 @@ Base = declarative_base()
 NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
 
 # Database Models imported from models.py
-from models import User, Base
+from backend.models import User, Base
 
 # Category model
 class Category(Base):
@@ -260,5 +260,6 @@ async def serve_login_page():
     return {"message": "Welcome to Finoria API. Please sign in at /login.html"}
 
 # Start the application
+import uvicorn
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True, debug=True)
