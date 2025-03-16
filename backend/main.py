@@ -97,19 +97,85 @@ class ItemCreate(BaseModel):
     quantity: int = 1  # Default value for quantity
 
 class TransactionCreate(BaseModel):
-    name: str
+    transaction_type: str  # 'buy', 'sell', 'return'
+    item_id: int
+    quantity: int
     amount: int
 
 
-# Transaction Endpoints
-@app.post("/add_transaction/")
-async def add_transaction(transaction: TransactionCreate, db: Session = Depends(get_db)):
-    db_transaction = Transaction(name=transaction.name, amount=transaction.amount)
+@app.post("/process_transaction/")
+async def process_transaction(transaction: TransactionCreate, db: Session = Depends(get_db)):
+    # Retrieve the item based on item_id
+    db_item = db.query(Item).filter(Item.id == transaction.item_id).first()
+    if not db_item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    # Process the transaction based on the type
+    if transaction.transaction_type == "buy":
+        db_item.quantity += transaction.quantity  # Increase the quantity of the item
+        db_item.sale_price = transaction.amount  # Update the sale price (if necessary)
+    elif transaction.transaction_type == "sell":
+        if db_item.quantity < transaction.quantity:
+            raise HTTPException(status_code=400, detail="Not enough stock to sell")
+        db_item.quantity -= transaction.quantity  # Decrease the quantity of the item
+        db_item.sale_price = transaction.amount  # Update the sale price (if necessary)
+    elif transaction.transaction_type == "return":
+        db_item.quantity += transaction.quantity  # Increase the quantity of the item
+    else:
+        raise HTTPException(status_code=400, detail="Invalid transaction type")
+
+    # Create a transaction record
+    db_transaction = Transaction(name=transaction.transaction_type, amount=transaction.amount)
     db.add(db_transaction)
     db.commit()
     db.refresh(db_transaction)
-    return {"message": f"Transaction '{db_transaction.name}' added successfully!"}
 
+    db.commit()  # Commit the changes to the database
+    return {"message": f"Transaction processed successfully: {transaction.transaction_type}"}
+
+
+# Transaction Endpoints
+from fastapi import Form
+
+@app.post("/add_transaction/")
+async def add_transaction(
+    category_id: int = Form(...), 
+    item_id: int = Form(...), 
+    transaction_type: str = Form(...), 
+    quantity: int = Form(...), 
+    db: Session = Depends(get_db)
+):
+    # Your logic here
+    item = db.query(Item).filter(Item.id == item_id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+    if transaction_type == "buy":
+        item.quantity += quantity
+        amount = item.cost * quantity
+    elif transaction_type == "sell":
+        if item.quantity < quantity:
+            raise HTTPException(status_code=400, detail="Not enough stock to sell")
+        item.quantity -= quantity
+        amount = item.sale_price * quantity
+    elif transaction_type == "return":
+        item.quantity += quantity
+        amount = item.sale_price * quantity
+    else:
+        raise HTTPException(status_code=400, detail="Invalid transaction type")
+
+    db_transaction = Transaction(
+        name=f"{transaction_type} {item.name}",
+        amount=amount,
+    )
+    db.add(db_transaction)
+    db.commit()
+    db.refresh(db_transaction)
+
+    # Commit changes for item as well
+    db.commit()
+
+    return {"message": f"Transaction '{db_transaction.name}' added successfully!"}
 
 @app.delete("/delete_transaction/{transaction_id}")
 async def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
