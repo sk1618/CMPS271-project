@@ -17,3 +17,9 @@ uvicorn main:app --reload
 
 # Step 7: Deactivate the virtual environment (when done)
 deactivate
+
+
+To populate the database
+sqlite3 test.db
+.read populate.sql
+.exit
