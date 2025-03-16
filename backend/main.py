@@ -135,11 +135,17 @@ async def process_transaction(transaction: TransactionCreate, db: Session = Depe
 
 
 # Transaction Endpoints
+from fastapi import Form
+
 @app.post("/add_transaction/")
 async def add_transaction(
-    category_id: int, item_id: int, transaction_type: str, quantity: int, db: Session = Depends(get_db)
+    category_id: int = Form(...), 
+    item_id: int = Form(...), 
+    transaction_type: str = Form(...), 
+    quantity: int = Form(...), 
+    db: Session = Depends(get_db)
 ):
-    # Fetch the selected item
+    # Your logic here
     item = db.query(Item).filter(Item.id == item_id).first()
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
@@ -158,7 +164,6 @@ async def add_transaction(
     else:
         raise HTTPException(status_code=400, detail="Invalid transaction type")
 
-    # Create the transaction record
     db_transaction = Transaction(
         name=f"{transaction_type} {item.name}",
         amount=amount,
@@ -167,11 +172,10 @@ async def add_transaction(
     db.commit()
     db.refresh(db_transaction)
 
-    # Commit the changes to the item
+    # Commit changes for item as well
     db.commit()
 
     return {"message": f"Transaction '{db_transaction.name}' added successfully!"}
-
 
 @app.delete("/delete_transaction/{transaction_id}")
 async def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):

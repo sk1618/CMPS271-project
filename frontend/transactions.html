@@ -3,64 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="transactions.css" />
+
     <title>Transaction Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #4CAF50;
-            padding: 15px;
-            text-align: center;
-            color: white;
-        }
-        .container {
-            padding: 20px;
-        }
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        select, input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-        .transaction-list {
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-    </style>
+    
 </head>
 <body>
 
@@ -73,13 +20,15 @@
         <h2>Create a Transaction</h2>
         <form action="/add_transaction/" method="post" id="transactionForm">
             <label for="category">Category</label>
-            <select id="category" name="category" required>
+            <!-- Change name attribute from 'category' to 'category_id' -->
+            <select id="category" name="category_id" required>
                 <option value="">Select a Category</option>
                 <!-- Categories will be populated here -->
             </select>
 
             <label for="item">Item</label>
-            <select id="item" name="item" required>
+            <!-- Change name attribute from 'item' to 'item_id' -->
+            <select id="item" name="item_id" required>
                 <option value="">Select an Item</option>
                 <!-- Items will be populated here -->
             </select>
@@ -118,44 +67,73 @@
 </div>
 
 <script>
-   // Load Categories for the transaction form
-   function loadCategories() {
-       fetch('http://127.0.0.1:8000/categories/')
-           .then(response => response.json())
-           .then(data => {
-               const categorySelect = document.getElementById('category');
-               data.categories.forEach(category => {
-                   const option = document.createElement('option');
-                   option.value = category.id;
-                   option.textContent = category.name;
-                   categorySelect.appendChild(option);
-               });
-           });
-   }
+   // Submit transaction form via fetch
+   document.getElementById('transactionForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent default form submission
 
-   // Fetch items when category is selected
-   document.getElementById('category').addEventListener('change', function() {
-       const categoryId = this.value;
-       if (!categoryId) return;
+        const formData = new URLSearchParams(new FormData(this));  // Convert FormData to URLSearchParams
 
-       fetch(`http://127.0.0.1:8000/category/${categoryId}`)
-           .then(response => response.json())
-           .then(data => {
-               const itemSelect = document.getElementById('item');
-               itemSelect.innerHTML = '<option value="">Select an Item</option>'; // Clear previous items
+        // Use the correct backend URL (FastAPI runs on port 8000)
+        fetch('http://127.0.0.1:8000/add_transaction/', {
+            method: 'POST',  
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);  // Show success message
+            console.log('Transaction added:', data);
+        })
+        .catch(error => {
+            alert("Error processing transaction");
+            console.error('Error:', error);
+        });
+    });
 
-               data.items.forEach(item => {
-                   const option = document.createElement('option');
-                   option.value = item.id;
-                   option.textContent = item.name;
-                   itemSelect.appendChild(option);
-               });
-           });
-   });
+    // Load Categories for the transaction form
+    function loadCategories() {
+        fetch('http://127.0.0.1:8000/categories/')
+            .then(response => response.json())
+            .then(data => {
+                const categorySelect = document.getElementById('category');
+                data.categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            });
+    }
 
-   // Load categories on page load
-   window.onload = loadCategories;
+    // Fetch items when category is selected
+    document.getElementById('category').addEventListener('change', function() {
+        const categoryId = this.value;
+        if (!categoryId) return;
 
+        fetch(`http://127.0.0.1:8000/category/${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                const itemSelect = document.getElementById('item');
+                itemSelect.innerHTML = '<option value="">Select an Item</option>'; // Clear previous items
+
+                data.items.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    itemSelect.appendChild(option);
+                });
+            });
+    });
+
+    // Load categories on page load
+    window.onload = loadCategories;
 </script>
 
 </body>
