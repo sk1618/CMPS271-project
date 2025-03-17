@@ -11,7 +11,6 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from dotenv import load_dotenv
-from fastapi import HTTPException
 import requests
 import uvicorn
 
@@ -23,15 +22,11 @@ from backend.auth_utils import get_current_user
 load_dotenv()
 
 # Database setup
-DATABASE_URL = "sqlite:///./test.db"
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
-
+from backend.database import engine, SessionLocal, Base
 NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
 
 # Database Models imported from models.py
-from backend.models import User, Base
+from backend.models import User
 
 # Category model
 class Category(Base):
@@ -262,4 +257,4 @@ async def serve_login_page():
 # Start the application
 import uvicorn
 if __name__ == "__main__":
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True, debug=True)
+    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)

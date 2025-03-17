@@ -1,3 +1,4 @@
+import {backend_url} from "./env.js"
 // Function to handle form toggling
 function toggleForms() {
     const loginForm = document.getElementById('login-form');
@@ -11,11 +12,13 @@ function toggleForms() {
         signUpForm.style.display = 'block';
     }
 }
+document.querySelectorAll(".signup-toggle")
+  .forEach(item => item.addEventListener("click", toggleForms));
 
 // Function to handle sign-up form submission
 async function handleSignUp(event) {
     event.preventDefault();
-    
+    console.log("hello")
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;
     
@@ -27,7 +30,7 @@ async function handleSignUp(event) {
     document.getElementById('signup-button-text').style.display = 'none';
     
     try {
-        const response = await fetch('/register', {
+        const response = await fetch(`${backend_url}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,7 +81,7 @@ async function handleSignIn(event) {
         formData.append('username', username);
         formData.append('password', password);
         
-        const response = await fetch('/login', {
+        const response = await fetch(`${backend_url}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
