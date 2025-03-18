@@ -16,7 +16,17 @@ import requests
 import uvicorn
 
 # Load environment variables from .env file if present
-load_dotenv()
+# load_dotenv()
+
+
+# Load environment variables from backend/.env
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
+
+# Access environment variables
+SECRET_KEY = os.getenv("SECRET_KEY")
+NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
+
+
 
 # Database setup
 DATABASE_URL = "sqlite:///./test.db"
@@ -257,10 +267,12 @@ if __name__ == "__main__":
 async def fetch_stock_news(stocks: str):
     if not NEWSAPI_KEY:
         raise HTTPException(status_code=500, detail="NewsAPI key not configured.")
-
+    
+    
     api_url = f"https://newsapi.org/v2/everything?q={stocks}&apiKey={NEWSAPI_KEY}"
 
     try:
+        
         response = requests.get(api_url)
         response.raise_for_status()  # Raise an exception for HTTP errors
         data = response.json()
@@ -275,3 +287,7 @@ async def fetch_stock_news(stocks: str):
         return {"articles": limited_articles}
     except requests.exceptions.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch news: {str(e)}")
+
+
+
+

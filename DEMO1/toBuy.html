@@ -2,8 +2,11 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Finoria-Purchasing List</title>
     <link rel = "stylesheet" href="toBuyStyle.css">
+    <link rel="stylesheet" type="text/css" href="/frontend/navigation.css" />
+    
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -12,19 +15,32 @@
 <body>
     <header>
         <nav>
-           <a href="homePage.html" class="logo">Finoria</a> <!-- Logo as a link to homepage -->
-            <ul class="nav-links">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="toBuy.html">Purchasing List</a></li>
-                <li><a href="expenses.html" class="transactions-link"></i>Transactions</a></li>
+          <a href="/frontend/homePage.html" class="logo">Finoria</a>
+              <ul class="nav-links">
+                <li><a href="/frontend/dashboard.html">Dashboard</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropbtn">Inventory & Budget</a>
+                  <div class="dropdown-content">
+                    <a href="/frontend/inventory.html">Inventory</a>
+                    <a href="/DEMO1/expenses.html">Budget</a>
+                  </div>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropbtn">Transactions & Purchasing</a>
+                  <div class="dropdown-content">
+                    <a href="/frontend/transactions.html">Transactions</a>
+                    <a href="/DEMO1/toBuy.html">Purchasing List</a>
+                  </div>
+                </li>
                 <li><a href="#">Reports</a></li>
-                <li><a href="settings.html">Settings</a></li>
-                <li><a href="profile.html"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="/DEMO1/settings.html">Settings</a></li>
+                <li><a href="/frontend/profile.html"><i class="fas fa-user"></i> Profile</a></li>
                 <li><a href="#" id="logout">Logout</a></li>
               </ul>
-          
         </nav>
       </header>
+
+
     <div class="container">
         <div class="todo-app">
             <h2>To-Buy List 🛒📋</h2>
