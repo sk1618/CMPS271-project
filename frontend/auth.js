@@ -99,7 +99,7 @@ async function handleSignIn(event) {
             localStorage.setItem('email', data.email);
             
             // Redirect to dashboard or home page
-            window.location.href = '/dashboard.html'; // Change this to your dashboard URL
+            window.location.href = 'frontend/dashboard.html'; // Change this to your dashboard URL
         } else {
             // Login failed
             alert('Login failed: ' + (data.detail || 'Invalid credentials'));
@@ -119,7 +119,7 @@ function checkAuthStatus() {
     const token = localStorage.getItem('access_token');
     if (token) {
         // User is already logged in, redirect to dashboard
-        window.location.href = '/dashboard.html'; // Change this to your dashboard URL
+        window.location.href = '/frontend/dashboard.html'; // Change this to your dashboard URL
     }
 }
 
