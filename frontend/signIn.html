@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="signInStyle.css" />
 </head>
-
+<script src="env.js" defer  type="module"></script>
+<script src="auth.js" defer  type="module"></script>
+</body>
+</html>
 <body>
     <div class="website_title">
         <h1 class="heading1">Finoria</h1>
@@ -36,7 +39,7 @@
                     <i class="fas fa-spinner fa-spin" id="login-spinner" style="display: none;"></i>
                 </button>
                 <div class="signup-link">
-                    <p>Don't have an account? <a href="#signup" onclick="toggleForms()">Sign Up</a></p>
+                    <p>Don't have an account? <a href="#signup" class="signup-toggle">Sign Up</a></p>
                 </div>
             </form>
 
@@ -53,11 +56,11 @@
                 </div>
                 <!--<i class="fas fa-eye" id="toggle-password" onclick="togglePasswordVisibility('login-password')"></i>-->
                 <button type="submit" id="login-button">
-                    <span id="login-button-text">Sign Up</span>
-                    <i class="fas fa-spinner fa-spin" id="login-spinner" style="display: none;"></i>
+                    <span id="signup-button-text">Sign Up</span>
+                    <i class="fas fa-spinner fa-spin" id="signup-spinner" style="display: none;"></i>
                 </button>
                 <div class="signup-link">
-                    <p>Already have an account? <a href="#" onclick="toggleForms()">Sign In</a></p>
+                    <p>Already have an account? <a href="#" class="signup-toggle">Sign In</a></p>
                 </div>
             </form>
         </div>

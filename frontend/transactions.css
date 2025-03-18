@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+
 /* Base Reset & Font */
 * {
     margin: 0;
@@ -29,17 +32,80 @@ header {
     background: rgba(255, 255, 255, 0.9);
     padding: 15px 30px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     z-index: 100;
 }
 
-header h1 {
-    font-size: 48px;
-    color: #222;
+header:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.logo {
+    position: relative;
+    font-size: 28px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease;
+}
+
+.logo:hover {
+    color: #007bff; /* Highlight the logo on hover */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #007BFF;
+    transform: scale(1.1);
+}
+
+#profile i {
+    font-size: 20px;
+}
+
+/* Dark Mode Styles */
+body.dark-mode header {
+    background: rgba(0, 0, 0, 0.8); /* Darker header */
+}
+
+body.dark-mode .logo {
+    color: #f4f4f4;
+}
+
+body.dark-mode .nav-links li a {
+    color: #f4f4f4;
+}
+
+body.dark-mode .nav-links li a:hover {
+    color: #007bff;
 }
 
 /* Container for side-by-side layout */
@@ -58,14 +124,16 @@ header h1 {
 .transaction-list {
     flex: 1;
     min-width: 300px;
-    max-width: 45%;
+    max-width: 55%;
     height: 450px;  /* Adjusted height to fit content tightly */
     background: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-    overflow-y: auto;
-    
+}
+
+.form-container{
+    max-width: 25%;
 }
 
 /* Form Container Specifics */
@@ -115,7 +183,6 @@ header h1 {
 .transaction-list table {
     width: 100%;
     border-collapse: collapse;
-     
 }
 
 .transaction-list thead {
@@ -128,15 +195,12 @@ header h1 {
     display: block;
     max-height: calc(350px - 60px);  /* container height minus header approx */
     overflow-y: auto;
-    
-   
 }
 
 .transaction-list tbody tr {
     display: table;
     width: 100%;
     table-layout: fixed;
-
 }
 
 .transaction-list th,
