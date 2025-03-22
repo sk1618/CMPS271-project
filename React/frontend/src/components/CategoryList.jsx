@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const CategoryList = ({ shouldRefetch }) => {
+const CategoryList = ({ shouldRefetch, openPopup }) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -25,8 +25,8 @@ const CategoryList = ({ shouldRefetch }) => {
           {categories.map((category) => (
             <div key={category.id} className="category-block">
               <h3>{category.name}</h3>
-              {/* You could add a button or other interaction here */}
-              <button onClick={() => console.log(`Viewing items for ${category.name}`)}>
+              {/* Pass category.id to openPopup */}
+              <button onClick={() => openPopup(category.id)}>
                 View Items
               </button>
             </div>

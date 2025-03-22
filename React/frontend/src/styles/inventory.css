@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-
+body {
+  display: block;
+}
 /* Main Content */
 .homepage-content {
   text-align: center;
@@ -256,13 +258,6 @@ input, button {
   font-size: 16px;
 }
 
-button {
-  background: #007BFF;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
 
 button:hover {
   background: #0056b3;
@@ -277,5 +272,45 @@ button:hover {
   display: block;
   opacity: 1;
 }
+
+/* Add Item button styling */
+.add-item-button {
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.add-item-button:hover {
+  background-color: #45a049;
+}
+
+/* Delimiter (a small space between Add Item and items) */
+.delimiter {
+  height: 1px;
+  background-color: #ccc;
+  margin: 10px 0;
+}
+
+/* Item button styling */
+.item-button {
+  background-color: #ccc; /* Gray background */
+  color: white;
+  border: none;
+  margin: 5px 0;
+  padding: 10px;
+  cursor: pointer;
+}
+
+
+
+
+/* Item information styling */
+.item-info p {
+  margin: 5px 0;
+}
+
 
 

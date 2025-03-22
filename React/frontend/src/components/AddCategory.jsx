@@ -27,7 +27,6 @@ const AddCategory = ({ onCategoryAdded }) => {
     <div className="form-container">
       <h2>Add a Category</h2>
       <form>
-        <label htmlFor="category_name">Category Name:</label>
         <input
           type="text"
           id="category_name"
