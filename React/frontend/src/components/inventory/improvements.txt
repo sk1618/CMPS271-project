@@ -1,0 +1,2 @@
+make it autmaticly refresh when adding a new itme
+fix the items list buttons styling
