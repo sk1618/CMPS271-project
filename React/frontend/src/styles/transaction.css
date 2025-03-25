@@ -123,8 +123,8 @@ body.dark-mode .nav-links li a:hover {
 /* Equal Dimensions for Both Columns (Slightly Adjusted Height) */
 .form-container,
 .transaction-list {
-   
-    height: 450px;  /* Adjusted height to fit content tightly */
+   height:auto;
+    max-height: 630px;  /* Adjusted height to fit content tightly */
     background: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 10px;
@@ -194,7 +194,7 @@ body.dark-mode .nav-links li a:hover {
 
 .transaction-list tbody {
     display: block;
-    max-height: calc(350px - 60px);  /* container height minus header approx */
+    max-height:27em;  /* container height minus header approx */
     overflow-y: auto;
 }
 
