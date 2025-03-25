@@ -19,7 +19,7 @@ const Header = () => {
 				<li class="dropdown">
 				  <a href="#" class="dropbtn">Transactions & Purchasing</a>
 				  <div class="dropdown-content">
-					<a href="/frontend/transactions.html">Transactions</a>
+					<a href="../transaction">Transactions</a>
 					<a href="/DEMO1/toBuy.html">Purchasing List</a>
 				  </div>
 				</li>

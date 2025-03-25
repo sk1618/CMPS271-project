@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/inventory.css";
 
 const AddItemForm = ({ onSubmit, category_id }) => {
@@ -53,9 +53,35 @@ const AddItemForm = ({ onSubmit, category_id }) => {
   );
 };
 
-const ItemsPopup = ({ isOpen, closePopup, items, setItems, category_id }) => {
+
+
+const ItemsPopup = ({ isOpen, closePopup, category_id }) => {
+  const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showAddItemForm, setShowAddItemForm] = useState(false);
+
+  // Function to fetch items for the selected category
+  const fetchItems = async () => {
+    if (!category_id) return;
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/category/${category_id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch items");
+      }
+      const data = await response.json();
+      setItems(data.items);
+      console.log("Fetched items:", data.items);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+
+  // Fetch items when the popup opens or when category_id changes
+  useEffect(() => {
+    if (isOpen) {
+      fetchItems();
+    }
+  }, [isOpen, category_id]);
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
@@ -69,42 +95,29 @@ const ItemsPopup = ({ isOpen, closePopup, items, setItems, category_id }) => {
 
   const handleAddItemSubmit = async (newItem) => {
     try {
-      // Send the new item to the backend
+      const itemWithCategory = { ...newItem, category_id };
+      console.log("Category ID for new item:", category_id);
+
       const response = await fetch("http://127.0.0.1:8000/add_item/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newItem),
+        body: JSON.stringify(itemWithCategory),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to add item");
       }
-  
-      const result = await response.json();
-      console.log(result.message);
-  
-      // Refetch items for the current category
-      const itemsResponse = await fetch(`http://127.0.0.1:8000/items/?category_id=${category_id}`);
-      if (!itemsResponse.ok) {
-        throw new Error("Failed to fetch updated items");
-      }
-  
-      const itemsData = await itemsResponse.json();
-      console.log("Updated items:", itemsData);
-  
-      // Update the local state with the fetched items
-      setItems(itemsData);  // Ensure this updates the items state correctly
-  
-      // Close the form after submitting
+
+      console.log("Item added successfully");
+      fetchItems(); // Refetch items after adding a new one
       setShowAddItemForm(false);
     } catch (error) {
       console.error("Error adding item:", error);
     }
   };
-  
-  
+
   if (!isOpen) return null;
 
   return (
