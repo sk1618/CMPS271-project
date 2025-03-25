@@ -66,18 +66,24 @@ const Transaction = () => {
         }
     };
 
-    // Submit transaction form
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const formDataToSend = new URLSearchParams(new FormData(e.target));  // Convert FormData to URLSearchParams
-
+    
+        const formDataToSend = new URLSearchParams({
+            category_id: formData.category_id,
+            ftype: formData.transaction_type,  // Use 'ftype' as per the backend
+            fitem_id: formData.item_id,        // Use 'fitem_id' as per the backend
+            fquantity: formData.quantity,      // Use 'fquantity' as per the backend
+        });
+    
+        console.log("Form Data to Send:", formDataToSend.toString());
+    
         fetch('http://127.0.0.1:8000/add_transaction/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/x-www-form-urlencoded', // Use form encoding
             },
-            body: formDataToSend
+            body: formDataToSend.toString(),  // Send form data as a query string
         })
         .then(response => {
             if (!response.ok) {
@@ -88,14 +94,19 @@ const Transaction = () => {
         .then(data => {
             alert(data.message);  // Show success message
             console.log('Transaction added:', data);
-            setTransactions(prevTransactions => [data.transaction, ...prevTransactions]); // Add the new transaction without refreshing
+    
+            // After submitting the transaction, reload the transactions list
+            loadTransactions();  // This will fetch the updated list without page reload
         })
         .catch(error => {
             alert("Error processing transaction");
             console.error('Error:', error);
         });
     };
-
+    
+    
+    
+    
     return (
         <div>
            
@@ -143,6 +154,7 @@ const Transaction = () => {
                             onChange={handleFormChange}
                             required
                         >
+                            <option value="">Select a transaction type</option>
                             <option value="buy">Buy</option>
                             <option value="sell">Sell</option>
                             <option value="return">Return</option>
@@ -168,21 +180,19 @@ const Transaction = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>Transaction Type</th>
+                                <th>Type</th>
                                 <th>Item</th>
                                 <th>Quantity</th>
                                 <th>Amount</th>
-                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             {transactions.map((transaction) => (
                                 <tr key={transaction.id}>
-                                    <td>{transaction.transaction_type || 'N/A'}</td>
-                                    <td>{transaction.item || 'N/A'}</td>
+                                    <td>{transaction.type || 'N/A'}</td>
+                                    <td>{transaction.item_id || 'N/A'}</td>
                                     <td>{transaction.quantity || 'N/A'}</td>
                                     <td>{transaction.amount || 'N/A'}</td>
-                                    <td>{transaction.date || 'N/A'}</td>
                                 </tr>
                             ))}
                         </tbody>

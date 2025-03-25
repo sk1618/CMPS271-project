@@ -1,0 +1,2 @@
+make transaction item show name isntead of item
+make both tables have the same height
