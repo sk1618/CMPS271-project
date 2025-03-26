@@ -1,109 +1,130 @@
 .profile-container {
-    min-height: 100vh;
-    background: url("https://example.com/your-background.jpg") no-repeat center center/cover;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .profile-header {
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: 999;
-  }
-  
-  .profile-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 30px;
-  }
-  
-  .logo {
-    font-size: 28px;
-    font-weight: 700;
-    color: #333;
-    text-decoration: none;
-  }
-  
-  .nav-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-  }
-  
-  .nav-links li {
-    position: relative;
-  }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-  }
-  
-  .logout-btn {
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-weight: 500;
-    color: #333;
-  }
-  
-  .logout-btn:hover {
-    color: #007BFF;
-  }
-  
-  .profile-content {
-    background: rgba(255, 255, 255, 0.9);
-    margin: 40px auto;
-    padding: 30px;
-    width: 80%;
-    max-width: 800px;
-    border-radius: 10px;
-  }
-  
-  .profile-content h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 28px;
-    color: #333;
-  }
-  
-  .profile-info {
-    margin-bottom: 20px;
-    color: #555;
-  }
-  
-  .profile-info p {
-    margin: 8px 0;
-    font-size: 16px;
-  }
-  
-  .profile-info strong {
-    color: #333;
-  }
-  
+  min-height: 100vh;
+  background: url("https://example.com/your-background.jpg") no-repeat center center/cover;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-header {
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.profile-header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  text-decoration: none;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.logout-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #333;
+}
+
+.logout-btn:hover {
+  color: #007BFF;
+}
+
+/* Profile content layout */
+.profile-content {
+  background: rgba(255, 255, 255, 0.9);
+  margin: 40px auto;
+  padding: 30px;
+  width: 90%;
+  max-width: 1000px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.profile-content h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  color: #333;
+}
+
+/* Info section */
+.profile-info {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.profile-info p {
+  margin: 10px 0;
+}
+
+.profile-info strong {
+  color: #333;
+}
+
+/* Buttons layout */
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* Button style */
+.action-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 16px 32px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 160px;
+  text-align: center;
+}
+
+.action-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive tweaks */
+@media (max-width: 767px) {
   .profile-actions {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+    flex-direction: column;
+    gap: 16px;
   }
-  
-  .action-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 24px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+
+  .profile-info {
+    text-align: center;
   }
-  
-  .action-btn:hover {
-    background-color: #0056b3;
-  }
-  
+}
