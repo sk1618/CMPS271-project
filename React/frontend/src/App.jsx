@@ -1,27 +1,40 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './pages/Home';
 import Inventory from './pages/Inventory';
 import Transaction from './pages/Transaction';
-import Profile from "./pages/profile";
-import Signin from "./pages/signin";
-import Signup from "./pages/signup";
+import Profile from './pages/profile';
+import Signin from './pages/signin';
+import Signup from './pages/signup';
+
+const AppContent = () => {
+  const location = useLocation();
+  const hideHeaderOn = ["/signin", "/signup"];
+  const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
+
+  return (
+    <>
+      {shouldShowHeader && <Header />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/inventory" element={<Inventory />} />
+        <Route path="/transaction" element={<Transaction />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </>
+  );
+};
 
 const App = () => {
   return (
     <Router>
-      <Header /> {/* Navigation bar */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="Inventory" element={<Inventory />} />
-        <Route path="Transaction" element={<Transaction />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/signin" element={<Signin />} />
-      <Route path="/signup" element={<Signup />} />
-      </Routes>
+      <AppContent />
     </Router>
   );
 };
 
 export default App;
+
