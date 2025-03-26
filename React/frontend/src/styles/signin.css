@@ -1,95 +1,110 @@
+/* Make entire page fill the screen with no margin */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Fullscreen background with center-aligned content */
 .sign-in-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    background: url('https://felicianofinancial.com/wp-content/uploads/2021/06/background-2-1080x675.jpg')
-      no-repeat center center/cover;
-    padding: 2rem;
-  }
-  
-  .website_title {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .heading1 {
-    font-weight: bold;
-    font-size: 50px;
-    color: #333;
-  }
-  
-  .Nice_quote {
-    font-size: 20px;
-    color: #555;
-  }
-  
-  .form-wrapper {
-    max-width: 400px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  form h2 {
-    text-align: center;
-    margin-bottom: 1rem;
-    color: #000;
-  }
-  
-  .input-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input-group input {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-  }
-  
-  .remember {
-    margin: 10px 0;
-    font-size: 14px;
-  }
-  
-  button {
-    padding: 12px;
-    border-radius: 6px;
-    border: none;
-    background: rgb(31, 31, 198);
-    color: #fff;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  button:hover {
-    background: rgb(21, 21, 150);
-  }
-  
-  .signup-link {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .signup-link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .signup-link a:hover {
-    text-decoration: underline;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background: url('https://felicianofinancial.com/wp-content/uploads/2021/06/background-2-1080x675.jpg')
+    no-repeat center center/cover;
+  overflow: hidden;
+}
+
+/* Centered content block with transparent white background */
+.form-wrapper {
+  max-width: 400px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+}
+
+/* Title and quote */
+.website_title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.heading1 {
+  font-weight: bold;
+  font-size: 50px;
+  color: #333;
+}
+
+.Nice_quote {
+  font-size: 20px;
+  color: #555;
+}
+
+/* Sign-in form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+form h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #000;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+/* Remember me checkbox */
+.remember {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+/* Sign In button */
+button {
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  background: rgb(31, 31, 198);
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: rgb(21, 21, 150);
+}
+
+/* Sign up link */
+.signup-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.signup-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}

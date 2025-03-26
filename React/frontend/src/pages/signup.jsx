@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./styles/signup.css"; // 👈 lowercase import to match file name
+import { useNavigate, Link } from "react-router-dom";
+import "../styles/signup.css";
 
 function Signup() {
   const navigate = useNavigate();
@@ -11,17 +11,21 @@ function Signup() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Save data (test/demo only)
+    // Save email & password (demo only — never do this in production)
     localStorage.setItem("email", email);
     localStorage.setItem("password", password);
 
-    // Redirect to Sign In page
-    navigate("/");
+    navigate("/signin");
   };
 
   return (
     <div className="signup-container">
       <div className="signup-form-wrapper">
+        <div className="website_title">
+          <h1 className="heading1">Finoria</h1>
+          <p className="Nice_quote">Let’s get you started.</p>
+        </div>
+
         <h2>Create Your Account</h2>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
@@ -48,7 +52,7 @@ function Signup() {
           <button type="submit">Sign Up</button>
 
           <p className="signin-link">
-            Already have an account? <a href="/">Sign In</a>
+            Already have an account? <Link to="/signin">Sign In</Link>
           </p>
         </form>
       </div>
