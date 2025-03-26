@@ -1,0 +1,428 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: white; 
+    transition: background-color 0.3s, color 0.3s;
+   }
+    .bloc-container {
+        display: flex;
+        gap: 50px;
+        width: 1200px;
+        margin-left: 150px;
+        margin-top: 150px;
+        animation: fadeIn 1s ease-out;
+    }
+    .bloc1 {
+        width: 350px;
+        padding: 20px;
+        border-style:none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        flex-grow: 1;
+        box-shadow:  0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .Create-budget {
+        color: black;
+        font-size: 20px;
+        font-weight: bold;
+        font-family: Roboto, Verdana, Arial;
+    }
+    .title-name {
+        margin-left: 0px;
+        margin-bottom: 3px;
+        font-weight: bold;
+        font-size: 13px;
+        font-family: Roboto, Verdana, Arial;
+    }
+    .groceries {
+        margin-top: 2px;
+        width: 250px;
+        display: block;
+        border-radius: 5px;
+    }
+    .currency{
+        padding-top: 15px;
+    }
+    .budget-creation {
+        display: block;
+        margin-top: 15px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        box-shadow: 3px 4px 5px rgba(0,0,0,0.20);
+    }
+    .budget-creation:hover, .details-button:hover{
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        transition: box-shadow 0.3s ease;
+    }
+    .buget-creation:hover{
+        background-color: #333;
+    }
+    .budget-creation:active {
+        background-color: #444;
+        color: white;
+        transform: scale(0.98);
+        box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+    .created-budget {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        width: 370px;
+        font-family: Arial, sans-serif;
+        display: inline-block;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .Budget-name-newdiv, .Budget-amount-newdiv {
+        font-weight: bold;
+        display: inline-block;
+        margin-top: 0px;
+    }
+    .Budget-name-newdiv{
+        margin-right: 50px;
+    }
+
+    /* Styling for the category dropdown */
+    .category-select {
+        margin-top: 10px;
+        width: 250px;
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .popup-message {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: none;
+        font-size: 16px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup-message.show {
+        display: block;
+    }
+
+    .Add-title {
+        display: inline-block;
+        font-weight: bold;
+        margin-top: 5px;
+        margin-bottom: 0px;
+    }
+    .st-title {
+        margin-right: 95px;
+    }
+    .st-input {
+        margin-right: 19px;
+        margin-top: 2px;
+        border-radius: 5px;
+    }
+    .nd-input {
+        width:150px;
+        border-radius: 5px;
+    }
+    .progress-container {
+        display: flex;
+        justify-content: space-between;
+        display:block;
+    }.empty{
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    .spent{
+        font-size: 10px;
+        margin: 0;
+        display: inline-block;
+    }
+    .spent-first{
+        margin-right: 200px;
+    }
+    progress {
+    width: 78%;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    }   
+    .progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background-color: lightgray;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+   }
+
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background-color: green;
+    transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+.Existing{
+    margin-left: 100px;
+    Font-weight: bold;
+    font-size: 40px;
+}
+.bloc3{
+    margin-left: 140px;
+}
+.button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    text-align: center;
+    width: 100%;
+}
+.details-button {
+padding: 10px 20px;
+border: none;
+color: white;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+margin-left: 110px;
+}
+.budget-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 73px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    box-sizing: border-box;
+  }
+  
+  header:hover {
+    background: rgba(255, 255, 255, 1);
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  /* Make the logo clickable and preserve its original styles */
+  .logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    white-space: nowrap;  /* Prevents text from wrapping */
+    overflow: hidden;     /* Ensures it doesn't overflow */
+    max-width: 100%; 
+  }
+  
+  .logo:hover {
+    color: #007bff; /* Highlight the logo on hover */
+  }
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+  }
+  
+  .nav-links li a {
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .nav-links li a:hover {
+    color: #007BFF;
+    transform: scale(1.1);
+  }
+  
+  @keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Dark Mode */
+body.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+/* Dark mode for elements */
+.dark-mode .bloc1 {
+    border-color: white;
+    background-color: #333;
+}
+
+.dark-mode .Create-budget,
+.dark-mode .title-name,
+.dark-mode .Add-title {
+    color: white;
+}
+
+/* Dark mode for progress bar */
+.dark-mode .progress-bar-container {
+    background-color: #444;
+}
+
+.dark-mode .progress-fill {
+    background-color: lightgreen;
+}
+
+/* Dark mode for buttons */
+.dark-mode .budget-creation,
+.dark-mode .details-button {
+    background-color: #007BFF;
+    color: white;
+}
+
+.dark-mode .budget-creation:hover,
+.dark-mode .details-button:hover {
+    background-color: #0056b3;
+}
+.dark-mode header {
+    background: black !important;
+}
+
+/* Dark mode for navigation links */
+.dark-mode .nav-links li a {
+    color: white !important;
+}
+
+/* Ensure hover effect still works */
+.dark-mode .nav-links li a:hover {
+    color: #007BFF !important;
+}
+.dark-mode .logo{
+    color: white;
+}
+
+.floating-button {
+    position: absolute;
+    top: 93px; /* Just below the navbar */
+    left: 20px;
+    background: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.floating-button:hover {
+    background: #0056b3;
+    transform: scale(1.1);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 160px;
+    z-index: 1;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.2s ease;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  /* Dark Mode Styles for Dropdown */
+  body.dark-mode .dropdown-content {
+    background-color: #333;
+    box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.1);
+  }
+  
+  body.dark-mode .dropdown-content a {
+    color: #fff;
+    border-bottom: 1px solid #555;
+  }
+  
+  body.dark-mode .dropdown-content a:hover {
+    background-color: #555;
+  }
+  
+  /* Optional: Add a smooth fade-in animation */
+  .dropdown-content {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .dropdown-content a:last-child {
+    border-bottom: none;
+  }
+  
