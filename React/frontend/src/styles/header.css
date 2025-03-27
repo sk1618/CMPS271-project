@@ -1,14 +1,17 @@
+/* Import Poppins Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
+/* Global Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
 }
 
 body {
-  background: url('table-with-finance-work-stuff-coffee-money-tablet-pen-papers_1268-17457.jpg.avif') no-repeat center center/cover;
+  background: url('table-with-finance-work-stuff-coffee-money-tablet-pen-papers_1268-17457.jpg.avif') 
+    no-repeat center center/cover;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,6 +22,7 @@ body {
   transition: background-color 0.3s ease;
 }
 
+/* Fixed Header */
 header {
   position: fixed;
   top: 0;
@@ -31,7 +35,6 @@ header {
   align-items: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   z-index: 100;
-  padding-top: 20px
 }
 
 header:hover {
@@ -45,17 +48,13 @@ nav {
   justify-content: space-between;
 }
 
-/* Make the logo clickable and preserve its original styles */
+/* Logo */
 .logo {
-  position: relative;
   font-size: 28px;
   font-weight: 700;
   color: #333;
   text-transform: uppercase;
   letter-spacing: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
   text-decoration: none; /* Remove underline */
   transition: color 0.3s ease;
 }
@@ -64,10 +63,15 @@ nav {
   color: #007bff; /* Highlight the logo on hover */
 }
 
+/* Navigation Links */
 .nav-links {
   list-style: none;
   display: flex;
   gap: 30px;
+}
+
+.nav-links li {
+  position: relative;
 }
 
 .nav-links li a {
@@ -84,10 +88,12 @@ nav {
   transform: scale(1.1);
 }
 
+/* User Icon */
 #profile i {
   font-size: 20px;
 }
 
+/* Main Content */
 .homepage-content {
   text-align: center;
   margin-top: 120px;
@@ -98,6 +104,7 @@ nav {
   animation: fadeIn 1s ease-out;
 }
 
+/* Animations */
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -129,7 +136,7 @@ h1 {
   }
 }
 
-
+/* Responsive Design */
 @media screen and (max-width: 768px) {
   .homepage-content {
     padding: 30px 20px;
@@ -178,68 +185,61 @@ body.dark-mode h1 {
   color: #f4f4f4;
 }
 
-
-
-
-   /* Dropdown Menu */
+/* Dropdown Menu */
 .nav-links .dropdown {
-    position: relative;
-  }
-  
-  .nav-links .dropdown:hover .dropdown-content {
-    display: block;
-    top: 100%; /* Ensure the dropdown is positioned below the menu item */
-  }
-  
-  .nav-links .dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%; /* Position it directly below the parent link */
-    left: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px; /* Less boxy, rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    min-width: 200px;
-    z-index: 200;
-    padding: 5px 0; /* Add some padding for spacing */
-  }
-  
-  .nav-links .dropdown-content a {
-    display: block;
-    padding: 12px 20px; /* Slightly more padding for a cleaner look */
-    color: #333;
-    text-decoration: none;
-    font-weight: 400;
-    transition: background-color 0.3s ease;
-  }
-  
-  .nav-links .dropdown-content a:hover {
-    background-color: #007BFF;
-    color: white;
-  }
-  
-  
-  
-  /* Dropdown Menu in Dark Mode */
-  body.dark-mode .nav-links .dropdown-content {
-    background-color: #333; /* Dark background for dropdown */
-    border: 1px solid #444; /* Darker border */
-  }
-  
-  body.dark-mode .nav-links .dropdown-content a {
-    color: #f4f4f4; /* Lighter text color */
-    padding: 12px 20px; /* Ensure padding for readability */
-    text-decoration: none; /* Remove any underline */
-  }
-  
-  body.dark-mode .nav-links .dropdown-content a:hover {
-    background-color: #007BFF; /* Blue background */
-    color: white; /* White text for better contrast */
-  }
-  
-  /* Ensuring the text doesn't disappear when hovering */
-  body.dark-mode .nav-links .dropdown-content a:active {
-    background-color: #0056b3; /* Darker blue when clicked */
-  }
-  
+  position: relative;
+}
+
+.nav-links .dropdown:hover .dropdown-content {
+  display: block;
+  top: 100%;
+}
+
+/* Dropdown Content */
+.nav-links .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  z-index: 200;
+  padding: 5px 0;
+}
+
+.nav-links .dropdown-content a {
+  display: block;
+  padding: 12px 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 400;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links .dropdown-content a:hover {
+  background-color: #007BFF;
+  color: white;
+}
+
+/* Dark Mode for Dropdown */
+body.dark-mode .nav-links .dropdown-content {
+  background-color: #333;
+  border: 1px solid #444;
+}
+
+body.dark-mode .nav-links .dropdown-content a {
+  color: #f4f4f4;
+  padding: 12px 20px;
+}
+
+body.dark-mode .nav-links .dropdown-content a:hover {
+  background-color: #007BFF;
+  color: white;
+}
+
+body.dark-mode .nav-links .dropdown-content a:active {
+  background-color: #0056b3;
+}
