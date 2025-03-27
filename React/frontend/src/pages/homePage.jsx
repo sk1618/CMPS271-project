@@ -28,8 +28,8 @@ const HomePage = () => {
         <h1>Welcome, <span>{username}</span>!</h1>
         <p>Your financial journey starts here.</p>
         <div className="quick-actions">
-          <Link to="#" className="action-btn">Add Transaction</Link>
-          <Link to="#" className="action-btn">View Reports</Link>
+          <Link to="/Transaction" className="action-btn">Add Transaction</Link>
+          <Link to="/Inventory" className="action-btn">View Inventory</Link>
         </div>
       </section>
     </>
