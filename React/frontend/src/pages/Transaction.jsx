@@ -2,19 +2,22 @@ import React, { useState, useEffect } from 'react';
 import "../styles/transaction.css";
 
 const Transaction = () => {
-    // State hooks for categories, items, transactions, and form data
+    // State hooks for categories, items, transactions, budgets, and form data
     const [categories, setCategories] = useState([]);
     const [items, setItems] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [budgets, setBudgets] = useState([]); // State for all budgets
     const [formData, setFormData] = useState({
         category_id: '',
         item_id: '',
         transaction_type: '',
-        quantity: 1
+        quantity: 1,
+        budget_id: '' // New field for budget ID
     });
 
-    // Function to load categories
+    // Function to load categories, budgets, and transactions
     useEffect(() => {
+        // Load categories
         fetch('http://127.0.0.1:8000/categories/')
             .then((response) => response.json())
             .then((data) => {
@@ -24,7 +27,17 @@ const Transaction = () => {
                 console.error('Error loading categories:', error);
             });
 
-        // Load transactions on page load
+        // Load all budgets using the new API
+        fetch('http://127.0.0.1:8000/get_all_budgets/')
+            .then((response) => response.json())
+            .then((data) => {
+                setBudgets(data.budgets);  // Store all budgets in state
+            })
+            .catch((error) => {
+                console.error('Error loading budgets:', error);
+            });
+
+        // Load transactions
         loadTransactions();
     }, []);
 
@@ -71,9 +84,10 @@ const Transaction = () => {
     
         const formDataToSend = new URLSearchParams({
             category_id: formData.category_id,
-            ftype: formData.transaction_type,  // Use 'ftype' as per the backend
-            fitem_id: formData.item_id,        // Use 'fitem_id' as per the backend
-            fquantity: formData.quantity,      // Use 'fquantity' as per the backend
+            ftype: formData.transaction_type,  
+            fitem_id: formData.item_id,       // Corrected field name
+            fquantity: formData.quantity,     // Corrected field name
+            fbudget_id: formData.budget_id    // Corrected field name
         });
     
         console.log("Form Data to Send:", formDataToSend.toString());
@@ -81,35 +95,31 @@ const Transaction = () => {
         fetch('http://127.0.0.1:8000/add_transaction/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded', // Use form encoding
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: formDataToSend.toString(),  // Send form data as a query string
+            body: formDataToSend.toString(),
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                return response.json().then(err => { throw new Error(err.detail); });
             }
             return response.json();
         })
         .then(data => {
-            alert(data.message);  // Show success message
+            alert(data.message);
             console.log('Transaction added:', data);
-    
-            // After submitting the transaction, reload the transactions list
-            loadTransactions();  // This will fetch the updated list without page reload
+            loadTransactions();
         })
         .catch(error => {
-            alert("Error processing transaction");
+            alert(`Error: ${error.message}`);
             console.error('Error:', error);
         });
     };
     
     
-    
-    
     return (
         <div>
-           <br /><br /><br />
+            <br /><br /><br />
             <div className="container">
                 <div className="form-container">
                     <h2>Create a Transaction</h2>
@@ -171,6 +181,22 @@ const Transaction = () => {
                             required
                         />
 
+                        <label htmlFor="budget">Budget</label>
+                        <select
+                            id="budget"
+                            name="budget_id"
+                            value={formData.budget_id}
+                            onChange={handleFormChange}
+                            required
+                        >
+                            <option value="">Select a Budget</option>
+                            {budgets.map((budget) => (
+                                <option key={budget.id} value={budget.id}>
+                                    {budget.name}
+                                </option>
+                            ))}
+                        </select>
+
                         <button type="submit" className="button">Submit Transaction</button>
                     </form>
                 </div>
@@ -184,6 +210,7 @@ const Transaction = () => {
                                 <th>Item</th>
                                 <th>Quantity</th>
                                 <th>Amount</th>
+                                <th>Budget</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -193,6 +220,7 @@ const Transaction = () => {
                                     <td>{transaction.item_id || 'N/A'}</td>
                                     <td>{transaction.quantity || 'N/A'}</td>
                                     <td>{transaction.amount || 'N/A'}</td>
+                                    <td>{transaction.budget_id || 'N/A'}</td>
                                 </tr>
                             ))}
                         </tbody>

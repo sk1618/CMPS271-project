@@ -66,11 +66,14 @@ class Transaction(Base):
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String, index=True)
     item_id = Column(Integer, ForeignKey("items.id"))  # Foreign key to Item model
+    budget_id = Column(Integer, ForeignKey("budgets.id"))  # Foreign key to Budget model
     quantity = Column(Integer)
     amount = Column(Integer)
     
-    # Relationship with Item model
+    # Relationships with Item and Budget models
     item = relationship("Item")
+    budget = relationship("Budget")
+
 
 class Budget(Base):
     __tablename__ = 'budgets'
@@ -125,7 +128,9 @@ class TransactionCreate(BaseModel):
     type: str  # 'buy', 'sell', 'return'
     item_id: int  # Use item_id instead of item_name (foreign key)
     quantity: int
+    budget_id: int  # New field for budget_id
     amount: int
+
 
 
 
@@ -138,7 +143,8 @@ async def add_transaction(
     category_id: int = Form(...), 
     ftype: str = Form(...), 
     fitem_id: int = Form(...),  # Changed to item_id
-    fquantity: int = Form(...), 
+    fquantity: int = Form(...),
+    fbudget_id: int = Form(...),  # New field for budget_id
     db: Session = Depends(get_db)
 ):
     # Retrieve item based on item_id (fitem_id in form data)
@@ -146,23 +152,34 @@ async def add_transaction(
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
 
+    # Retrieve budget based on budget_id (fbudget_id in form data)
+    budget = db.query(Budget).filter(Budget.id == fbudget_id).first()
+    if not budget:
+        raise HTTPException(status_code=404, detail="Budget not found")
+
+    # Process the transaction based on its type
     if ftype == "buy":
         item.quantity += fquantity
         amount = item.cost * fquantity * -1
+        budget.amount += amount  # Deduct from the budget
     elif ftype == "sell":
         if item.quantity < fquantity:
             raise HTTPException(status_code=400, detail="Not enough stock to sell")
         item.quantity -= fquantity
         amount = item.sale_price * fquantity
+        budget.amount += amount  # Add to the budget
     elif ftype == "return":
         item.quantity += fquantity
         amount = item.sale_price * fquantity
+        budget.amount += amount  # Add to the budget
     else:
         raise HTTPException(status_code=400, detail="Invalid transaction type")
 
+    # Create the transaction record
     db_transaction = Transaction(
         type=ftype,
         item_id=item.id,  # Store the item_id as foreign key
+        budget_id= fbudget_id,  # Store the budget_id as foreign key
         quantity=fquantity,
         amount=amount,
     )
@@ -170,10 +187,12 @@ async def add_transaction(
     db.commit()
     db.refresh(db_transaction)
 
-    # Commit changes for item as well
+    # Commit changes for item and budget as well
     db.commit()
+    db.refresh(budget)
 
     return {"message": f"Transaction '{db_transaction.type}' added successfully!"}
+
 
 @app.delete("/delete_transaction/{transaction_id}")
 async def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
@@ -305,6 +324,22 @@ async def get_budgets(parent_id: Optional[int] = None, db: Session = Depends(get
         return {"budgets": budgets}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@app.get("/get_all_budgets/")
+async def get_all_budgets(db: Session = Depends(get_db)):
+    try:
+        # Fetch all budgets without any filtering
+        budgets = db.query(Budget).all()
+
+        # Ensure that the amount is always displayed as 0.00 if not set
+        for budget in budgets:
+            if budget.amount is None:
+                budget.amount = 0.0  # Default to 0.0 if None
+
+        return {"budgets": budgets}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 
 class BudgetAmountUpdate(BaseModel):
     amount: float
