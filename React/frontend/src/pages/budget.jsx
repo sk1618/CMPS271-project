@@ -99,15 +99,26 @@ function Budget() {
   useEffect(() => {
     if (started) {
       const savedMainBudget = localStorage.getItem('mainBudget');
+      
       if (savedMainBudget) {
-        const parsedBudget = JSON.parse(savedMainBudget);
-        setMainBudget(parsedBudget);
-        fetchBudgets(parsedBudget.id).then(setSubBudgets);
+        try {
+          const parsedBudget = JSON.parse(savedMainBudget);
+          if (parsedBudget) {
+            setMainBudget(parsedBudget);
+            fetchBudgets(parsedBudget.id).then(setSubBudgets);
+          } else {
+            fetchMainBudget();
+          }
+        } catch (error) {
+          console.error('Error parsing saved budget:', error);
+          fetchMainBudget();  // Fallback if parsing fails
+        }
       } else {
         fetchMainBudget();
       }
     }
   }, [started]);
+  
 
   return (
     <div className="">
