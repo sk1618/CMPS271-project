@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Home from './pages/homePage';
 import Inventory from './pages/Inventory';
 import Transaction from './pages/Transaction';
-//import ToBuy from './pages/toBuy';
+import ToBuy from './pages/toBuy';
 import Settings from './pages/settings';
 import Profile from './pages/profile';
 import Signin from './pages/signin';
@@ -22,7 +22,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/homePage" element={<Home />} />
         <Route path="/inventory" element={<Inventory />} />
-        
+        <Route path="/toBuy" element={<ToBuy />} />
         <Route path="/transaction" element={<Transaction />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/profile" element={<Profile />} />
