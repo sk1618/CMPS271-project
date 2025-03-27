@@ -16,6 +16,7 @@ function Profile() {
 
   return (
     <div className="profile-container">
+       <br /><br /><br />
       <main className="profile-content">
         <h1>My Profile</h1>
 

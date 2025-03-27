@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey,Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from dotenv import load_dotenv
@@ -71,6 +71,16 @@ class Transaction(Base):
     
     # Relationship with Item model
     item = relationship("Item")
+
+class Budget(Base):
+    __tablename__ = 'budgets'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    amount = Column(Float, default=0.0)
+    parent_budget_id = Column(Integer, ForeignKey('budgets.id'), nullable=True)
+    
+    parent_budget = relationship("Budget", remote_side=[id], backref="sub_budgets")
 
 
 # Create all tables
@@ -236,6 +246,126 @@ async def view_transactions(request: Request, db: Session = Depends(get_db)):
 async def view_inventory(request: Request, db: Session = Depends(get_db)):
     categories = db.query(Category).all()
     return templates.TemplateResponse("inventory.html", {"request": request, "categories": categories})
+
+class SubBudgetCreate(BaseModel):
+    name: str
+
+# Create the main budget if needed and return the main budget
+def create_main_budget_if_needed(db: Session):
+    main_budget = db.query(Budget).filter(Budget.parent_budget_id == None).first()
+    if not main_budget:
+        new_budget = Budget(name="Main Budget", amount=0.0, parent_budget_id=0)
+        db.add(new_budget)
+        db.commit()
+        db.refresh(new_budget)
+        return new_budget
+    return main_budget
+
+# Endpoint to create sub-budgets under a specific parent budget
+@app.post("/create_sub_budget/{parent_budget_id}")
+async def create_sub_budget(parent_budget_id: int, sub_budget_data: SubBudgetCreate, db: Session = Depends(get_db)):
+    try:
+        # Find the parent budget
+        parent_budget = db.query(Budget).filter(Budget.id == parent_budget_id).first()
+        if not parent_budget:
+            raise HTTPException(status_code=404, detail="Parent budget not found")
+        
+        # Create the sub-budget
+        sub_budget = Budget(name=sub_budget_data.name, amount=0.0, parent_budget_id=parent_budget_id)
+        db.add(sub_budget)
+        db.commit()
+        db.refresh(sub_budget)
+        
+        return sub_budget
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# Endpoint to start the process (create the main budget if needed)
+@app.post("/start/")
+async def start(db: Session = Depends(get_db)):
+    main_budget = create_main_budget_if_needed(db)
+    return main_budget  # Return the main budget so the frontend can display it
+
+# Endpoint to get budgets (sub-budgets for a specific parent)
+from typing import Optional  # Import Optional for type hinting
+
+@app.get("/budgets/")
+async def get_budgets(parent_id: Optional[int] = None, db: Session = Depends(get_db)):
+    try:
+        if parent_id == 0:
+            budgets = db.query(Budget).filter(Budget.parent_budget_id.is_(0)).all()
+        else:
+            budgets = db.query(Budget).filter(Budget.parent_budget_id == parent_id).all()
+
+        # Ensure that the amount is always displayed as 0.00 if not set
+        for budget in budgets:
+            if budget.amount is None:
+                budget.amount = 0.0  # Default to 0.0 if None
+
+        return {"budgets": budgets}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+class BudgetAmountUpdate(BaseModel):
+    amount: float
+
+@app.post("/add_budget_amount/{budget_id}")
+async def add_budget_amount(budget_id: int, amount_data: BudgetAmountUpdate, db: Session = Depends(get_db)):
+    if amount_data.amount <= 0:
+        raise HTTPException(status_code=400, detail="Amount must be positive")
+    
+    budget = db.query(Budget).filter(Budget.id == budget_id).first()
+    if not budget:
+        raise HTTPException(status_code=404, detail="Budget not found")
+    
+    if budget.parent_budget_id == 0:
+        # Main budget: Just add the amount
+        budget.amount += amount_data.amount
+    else:
+        # Sub-budget: Deduct from parent and add to sub-budget
+        parent_budget = db.query(Budget).filter(Budget.id == budget.parent_budget_id).first()
+        if not parent_budget:
+            raise HTTPException(status_code=404, detail="Parent budget not found")
+        if parent_budget.amount < amount_data.amount:
+            raise HTTPException(status_code=400, detail="Not enough funds in parent budget")
+        
+        parent_budget.amount -= amount_data.amount
+        budget.amount += amount_data.amount
+
+    db.commit()  # Commit changes to the database
+    db.refresh(budget)  # Refresh to get the updated value
+    
+    return {"message": "Amount added successfully", "budget": budget}  # Return updated budget
+
+
+@app.post("/remove_budget_amount/{budget_id}")
+async def remove_budget_amount(budget_id: int, amount_data: BudgetAmountUpdate, db: Session = Depends(get_db)):
+    if amount_data.amount <= 0:
+        raise HTTPException(status_code=400, detail="Amount must be positive")
+    
+    budget = db.query(Budget).filter(Budget.id == budget_id).first()
+    if not budget:
+        raise HTTPException(status_code=404, detail="Budget not found")
+    
+    if budget.amount < amount_data.amount:
+        raise HTTPException(status_code=400, detail="Not enough funds in budget")
+    
+    if budget.parent_budget_id == 0:
+        # Main budget: Just remove the amount
+        budget.amount -= amount_data.amount
+    else:
+        # Sub-budget: Return amount to parent
+        parent_budget = db.query(Budget).filter(Budget.id == budget.parent_budget_id).first()
+        if not parent_budget:
+            raise HTTPException(status_code=404, detail="Parent budget not found")
+        
+        budget.amount -= amount_data.amount
+        parent_budget.amount += amount_data.amount
+
+    db.commit()
+    db.refresh(budget)
+    
+    return {"message": "Amount removed successfully", "budget": budget}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)

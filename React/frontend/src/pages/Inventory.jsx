@@ -22,7 +22,10 @@ const Inventory = () => {
   const closePopup = () => setIsPopupOpen(false);
 
   return (
+    <div>
+       <br /><br /><br />
     <div className="homepage-content">
+     
       <AddCategory onCategoryAdded={triggerRefetch} />
       <CategoryList shouldRefetch={shouldRefetch} openPopup={openPopup} />
       <ItemsPopup
@@ -30,6 +33,7 @@ const Inventory = () => {
         closePopup={closePopup}
         category_id={selectedCategoryId} // Pass the selected category ID
       />
+    </div>
     </div>
   );
 };

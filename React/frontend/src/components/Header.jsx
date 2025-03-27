@@ -13,7 +13,7 @@ const Header = () => {
 						<a href="#" class="dropbtn">Inventory & Budget</a>
 						<div class="dropdown-content">
 							<a href="../inventory">Inventory</a>
-							<a href="/DEMO1/expenses.html">Budget</a>
+							<a href="../budget">Budget</a>
 						</div>
 					</li>
 					<li class="dropdown">

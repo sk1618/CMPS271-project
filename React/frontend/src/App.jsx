@@ -7,6 +7,7 @@ import Transaction from './pages/Transaction';
 import Profile from './pages/profile';
 import Signin from './pages/signin';
 import Signup from './pages/signup';
+import Budget from './pages/budget';
 
 const AppContent = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const AppContent = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/budget" element={<Budget />} />
       </Routes>
     </>
   );

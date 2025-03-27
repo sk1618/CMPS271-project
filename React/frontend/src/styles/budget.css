@@ -1,0 +1,121 @@
+.budget-containerlist {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .budget-itemlist {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f4f4f4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+    width: 100%; /* Make the item take full width */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+  }
+  
+  .budget-itemlist:hover {
+    background: #e2e2e2;
+  }
+  
+  .budget-itemlist .budget-name {
+    flex-grow: 1; /* Allow name to take up remaining space */
+    font-weight: 500;
+    font-size: 18px;
+    white-space: nowrap; /* Prevent text overflow */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis if the name overflows */
+  }
+  
+  .budget-itemlist .budget-amount {
+    font-weight: 600;
+    font-size: 18px;
+    margin-left: 20px;
+    color: #007bff;
+    white-space: nowrap;
+  }
+  
+  .budget-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end; /* Ensure buttons are on the far right */
+  }
+  
+  .budget-actions input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 150px;
+  }
+  
+  .budget-actions button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 120px; /* Ensure the buttons stay within bounds */
+  }
+  
+  .budget-actions button:hover {
+    background-color: #0056b3;
+  }
+  
+  .sub-budget-containerlist {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .sub-budget-containerlist ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sub-budget-containerlist li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+    width: 100%; /* Ensure list items don’t overflow */
+  }
+  
+  .sub-budget-containerlist li:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .create-sub-budget-btnlist {
+    background-color: #28a745;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 300px; /* Add a max-width to keep it neat */
+  }
+  
+  .create-sub-budget-btnlist:hover {
+    background-color: #218838;
+  }
+  
