@@ -64,7 +64,7 @@ function Settings() {
         {/* Account Deletion */}
         <div className="settings-section">
           <h2>Account Settings</h2>
-          <button className="delete-btn" onClick={confirmDelete}>Delete Account</button>
+          {/*<button className="delete-btn" onClick={confirmDelete}>Delete Account</button>*/}
         </div>
       </section>
     </div>
