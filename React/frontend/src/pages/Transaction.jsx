@@ -123,7 +123,7 @@ const Transaction = () => {
             <div className="container">
                 <div className="form-container">
                     <h2>Create a Transaction</h2>
-                    <form id="transactionForm" onSubmit={handleSubmit}>
+                    <form id="transactionForm"  onSubmit={handleSubmit}   style={{ gap: "3px"}}>
                         <label htmlFor="category">Category</label>
                         <select
                             id="category"
