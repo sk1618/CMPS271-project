@@ -13,7 +13,9 @@ const AddCategory = ({ onCategoryAdded }) => {
     try {
       const response = await axios.post('http://127.0.0.1:8000/add_category/', {
         name: categoryName,
-      });
+      },{ headers:{
+        'Authorization':`Bearer ${localStorage.getItem("access_token")}`
+       }});
       alert(response.data.message);
       setCategoryName('');
       onCategoryAdded();

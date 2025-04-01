@@ -18,7 +18,9 @@ const Transaction = () => {
     // Function to load categories, budgets, and transactions
     useEffect(() => {
         // Load categories
-        fetch('http://127.0.0.1:8000/categories/')
+        fetch('http://127.0.0.1:8000/categories/',{headers:{
+        'Authorization':`Bearer ${localStorage.getItem("access_token")}`
+        }})
             .then((response) => response.json())
             .then((data) => {
                 setCategories(data.categories);
@@ -28,7 +30,9 @@ const Transaction = () => {
             });
 
         // Load all budgets using the new API
-        fetch('http://127.0.0.1:8000/get_all_budgets/')
+        fetch('http://127.0.0.1:8000/get_all_budgets/',{headers:{
+            'Authorization':`Bearer ${localStorage.getItem("access_token")}`
+            }})
             .then((response) => response.json())
             .then((data) => {
                 setBudgets(data.budgets);  // Store all budgets in state
@@ -43,7 +47,9 @@ const Transaction = () => {
 
     // Function to load transactions
     const loadTransactions = () => {
-        fetch('http://127.0.0.1:8000/transactions/')
+        fetch('http://127.0.0.1:8000/transactions/',{headers:{
+            'Authorization':`Bearer ${localStorage.getItem("access_token")}`
+            }})
             .then((response) => response.json())
             .then((data) => {
                 setTransactions(data.transactions);
@@ -56,7 +62,9 @@ const Transaction = () => {
     // Function to fetch items based on selected category
     const loadItems = (categoryId) => {
         if (!categoryId) return;
-        fetch(`http://127.0.0.1:8000/category/${categoryId}`)
+        fetch(`http://127.0.0.1:8000/category/${categoryId}`,{headers:{
+            'Authorization':`Bearer ${localStorage.getItem("access_token")}`
+            }})
             .then((response) => response.json())
             .then((data) => {
                 setItems(data.items);
@@ -96,6 +104,7 @@ const Transaction = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization':`Bearer ${localStorage.getItem("access_token")}`
             },
             body: formDataToSend.toString(),
         })

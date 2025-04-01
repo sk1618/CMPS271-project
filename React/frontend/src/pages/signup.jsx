@@ -7,10 +7,39 @@ function Signup() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  async function handleSignUp() {
+    // Extract username from email (or you could add a username field)
+    const username = email.split('@')[0];  
+    try {
+        const response = await fetch(`http://localhost:8000/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                username: username,
+                email: email, 
+                password: password 
+            }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Registration successful
+            alert('Registration successful! Please sign in.');
+        } else {
+            // Registration failed
+            alert(`Registration failed: ${data.detail}`);
+        }
+    } catch (error) {
+        console.error('Error during registration:', error);
+        alert('An error occurred during registration. Please try again.');
+    } 
+}
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    handleSignUp();
     // Save email & password (demo only — never do this in production)
     localStorage.setItem("email", email);
     localStorage.setItem("password", password);

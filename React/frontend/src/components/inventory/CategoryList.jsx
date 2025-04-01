@@ -7,7 +7,9 @@ const CategoryList = ({ shouldRefetch, openPopup }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/categories/');
+        const response = await axios.get('http://127.0.0.1:8000/categories/',{ headers:{
+          'Authorization':`Bearer ${localStorage.getItem("access_token")}`
+         }});
         setCategories(response.data.categories);
       } catch (error) {
         console.error('Error fetching categories', error);
