@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     loadTransactions();
 
     function loadTransactions() {
-        fetch('http://127.0.0.1:8000/transactions')
+        fetch('http://127.0.0.1:8000/transactions',{headers: {
+        'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+        },})
             .then(response => response.json())
             .then(data => {
                 data.transactions.forEach((transaction, index) => {
