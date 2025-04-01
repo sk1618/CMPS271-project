@@ -15,6 +15,10 @@ from fastapi import HTTPException
 import requests
 import uvicorn
 
+# Import our auth routes
+from backend.auth_routes import router as auth_router
+from backend.auth_utils import get_current_user
+
 # Load environment variables from .env file if present
 # load_dotenv()
 
@@ -29,13 +33,11 @@ NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
 
 
 # Database setup
-DATABASE_URL = "sqlite:///./test.db"
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
-
+from backend.database import engine, SessionLocal, Base
 NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
-# Database Models
+
+# Database Models imported from models.py
+from backend.models import User
 
 # Category model
 class Category(Base):
@@ -91,6 +93,9 @@ Base.metadata.create_all(bind=engine)
 
 # FastAPI instance
 app = FastAPI()
+
+# Include the auth routes
+app.include_router(auth_router)
 
 # Set up Jinja2Templates to look in the "frontend" folder
 templates = Jinja2Templates(directory="frontend")
@@ -187,7 +192,7 @@ async def add_transaction(
     db.commit()
     db.refresh(db_transaction)
 
-    # Commit changes for item and budget as well
+    # Commit changes for item as well
     db.commit()
     db.refresh(budget)
 
@@ -206,14 +211,21 @@ async def delete_transaction(transaction_id: int, db: Session = Depends(get_db))
 
 
 @app.get("/transactions/")
-async def get_transactions(db: Session = Depends(get_db)):
+async def get_transactions(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)  # Protect this endpoint
+):
     transactions = db.query(Transaction).all()
     return {"transactions": transactions}
 
 
 # Category Endpoints
 @app.post("/add_category/")
-async def add_category(category: CategoryCreate, db: Session = Depends(get_db)):
+async def add_category(
+    category: CategoryCreate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)  # Protect this endpoint
+):
     db_category = Category(name=category.name)
     db.add(db_category)
     db.commit()
@@ -222,13 +234,20 @@ async def add_category(category: CategoryCreate, db: Session = Depends(get_db)):
 
 
 @app.get("/categories/")
-async def get_categories(db: Session = Depends(get_db)):
+async def get_categories(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)  # Protect this endpoint
+):
     categories = db.query(Category).all()
     return {"categories": categories}
 
 
 @app.get("/category/{category_id}")
-async def get_category_items(category_id: int, db: Session = Depends(get_db)):
+async def get_category_items(
+    category_id: int, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)  # Protect this endpoint
+):
     category = db.query(Category).filter(Category.id == category_id).first()
     if category is None:
         raise HTTPException(status_code=404, detail="Category not found")
@@ -237,7 +256,11 @@ async def get_category_items(category_id: int, db: Session = Depends(get_db)):
 
 
 @app.post("/add_item/")
-async def add_item(item: ItemCreate, db: Session = Depends(get_db)):
+async def add_item(
+    item: ItemCreate, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)  # Protect this endpoint
+):
     db_item = Item(
         name=item.name,
         category_id=item.category_id,
@@ -256,13 +279,21 @@ templates = Jinja2Templates(directory="frontend")
 
 
 @app.get("/view_transactions")
-async def view_transactions(request: Request, db: Session = Depends(get_db)):
+async def view_transactions(
+    request: Request, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)  # Protect this endpoint
+):
     transactions = db.query(Transaction).all()
     return templates.TemplateResponse("transactions.html", {"request": request, "transactions": transactions})
 
 
 @app.get("/view_inventory")
-async def view_inventory(request: Request, db: Session = Depends(get_db)):
+async def view_inventory(
+    request: Request, 
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)  # Protect this endpoint
+):
     categories = db.query(Category).all()
     return templates.TemplateResponse("inventory.html", {"request": request, "categories": categories})
 
@@ -407,15 +438,16 @@ if __name__ == "__main__":
 
 # NewsFeed Endpoint
 @app.get("/fetch_stock_news/")
-async def fetch_stock_news(stocks: str):
+async def fetch_stock_news(
+    stocks: str,
+    current_user: User = Depends(get_current_user)  # Protect this endpoint
+):
     if not NEWSAPI_KEY:
         raise HTTPException(status_code=500, detail="NewsAPI key not configured.")
-    
-    
+
     api_url = f"https://newsapi.org/v2/everything?q={stocks}&apiKey={NEWSAPI_KEY}"
 
     try:
-        
         response = requests.get(api_url)
         response.raise_for_status()  # Raise an exception for HTTP errors
         data = response.json()
