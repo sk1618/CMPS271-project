@@ -16,8 +16,8 @@ import requests
 import uvicorn
 
 # Import our auth routes
-from backend.auth_routes import router as auth_router
-from backend.auth_utils import get_current_user
+from auth_routes import router as auth_router
+from auth_utils import get_current_user
 
 # Load environment variables from .env file if present
 # load_dotenv()
@@ -33,11 +33,11 @@ NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
 
 
 # Database setup
-from backend.database import engine, SessionLocal, Base
+from database import engine, SessionLocal, Base
 NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
 
 # Database Models imported from models.py
-from backend.models import User
+from models import User
 
 # Category model
 class Category(Base):
