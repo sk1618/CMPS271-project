@@ -23,7 +23,7 @@ const Header = () => {
 							<a href="../toBuy">Purchasing List</a>
 						</div>
 					</li>
-					<li><a href="#">Reports</a></li>
+					<li><a href="/teamSection">Who We Are</a></li>
 					<li><a href="/settings">Settings</a></li>
 					<li><Link to="/profile">
 						<i className="fas fa-user"></i>Profile
