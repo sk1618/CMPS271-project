@@ -12,6 +12,7 @@ import Signin from './pages/signin';
 import Signup from './pages/signup';
 import Budget from './pages/budget';
 import Dashboard from './pages/dashboard';
+import TeamSection from './pages/teamSection';
 
 const ErrorFallback = ({ error }) => (
   <div role="alert">
@@ -30,12 +31,12 @@ const AppContent = () => {
       {shouldShowHeader && <Header />}
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/homePage" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/toBuy" element={<ToBuy />} />
           <Route path="/transaction" element={<Transaction />} />
+          <Route path="/teamSection" element={<TeamSection/>}/>
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/signin" element={<Signin />} />
