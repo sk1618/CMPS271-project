@@ -110,8 +110,8 @@ const HomePage = () => {
               be happy to assist you.
             </p>
             <div className="button-container">
-              <Link to="/support">
-                <button>Contact Support</button>
+             <Link to="/teamSection#email">
+                <button>Contact us!</button>
               </Link>
             </div>
           </div>
