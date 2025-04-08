@@ -1,23 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
 
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: url('table-with-finance-work-stuff-coffee-money-tablet-pen-papers_1268-17457.jpg.avif') no-repeat center center/cover;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-attachment: fixed;
-  overflow-x: hidden;
-  transition: background-color 0.3s ease;
 }
 
 header {
@@ -34,369 +29,189 @@ header {
   z-index: 100;
 }
 
-header:hover {
-  background: rgba(255, 255, 255, 1);
-}
-
-nav {
+/* Main Section */
+section {
+  min-height: 80vh;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   width: 100%;
-  justify-content: space-between;
-}
-
-/* Make the logo clickable and preserve its original styles */
-.logo {
-  position: relative;
-  font-size: 28px;
-  font-weight: 700;
-  color: #333;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  text-decoration: none; /* Remove underline */
-  transition: color 0.3s ease;
-}
-
-.logo:hover {
-  color: #007bff; /* Highlight the logo on hover */
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-}
-
-.nav-links li a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.nav-links li a:hover {
-  color: #007BFF;
-  transform: scale(1.1);
-}
-
-#profile i {
-  font-size: 20px;
-}
-
-.homepage-content {
+  padding: 40px 0;
   text-align: center;
-  margin-top: 120px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 50px 40px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 1s ease-out;
+  scroll-snap-align: start;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-h1 {
+.hero-text {
   font-size: 48px;
-  color: #222;
   font-weight: 700;
+  margin-top: -20px;
   margin-bottom: 20px;
-  letter-spacing: 1.5px;
-  animation: fadeInText 1s ease-out;
+  color: #2c2c2c;
+  line-height: 1.2;
+  animation: fadeInUp 1s ease-out;
+  text-align: center; /* Move text to the left */
+  margin-left: 100px; /* Adjust left margin to add some space */
 }
 
-@keyframes fadeInText {
-  0% {
+@keyframes fadeInUp {
+  from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-.dropdown {
-  position: relative;
-  display: inline-block;
+
+.image-main {
+  display: flex;
+  justify-content: flex-start; /* Align images to the left */
+  align-items: center;
+  gap: 30px;
+  padding: 1.5rem;
+  margin-left: 200px;
+  animation: fadeInUp 1s ease-out;
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
+  flex-direction: row; /* Ensure text and images are in the same row */
+  align-items: center; /* Vertically align the text and images */
 }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #ffffff;
-  min-width: 160px;
-  z-index: 1;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
+.image-main img {
+  max-width: 480px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.image-main img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-down {
+  font-size: 48px;
+  font-weight: bold;
+  animation: bounce 2s infinite, glow 1.5s ease-in-out infinite alternate;
+  cursor: pointer;
+  margin-top: 0; /* Remove extra margin */
+  margin-left: 20px; /* Ensure the scroll-down arrow is aligned next to the text */
+  margin-top: 30px;
+  color: #007bff;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease;
 }
 
-.dropdown-content a {
-  color: #333;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  border-bottom: 1px solid #ddd;
-  transition: background-color 0.2s ease;
+.scroll-down:hover {
+  color: #6392c5;
+  text-shadow: 0 0 25px rgba(214, 40, 40, 0.7);
 }
 
-.dropdown-content a:hover {
-  background-color: #f0f0f0;
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(12px);
+  }
 }
 
-.dropdown:hover .dropdown-content {
-  display: block;
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1);
+  }
 }
 
-/* Dark Mode Styles for Dropdown */
-body.dark-mode .dropdown-content {
-  background-color: #333;
-  box-shadow: 0px 8px 16px rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .dropdown-content a {
-  color: #fff;
-  border-bottom: 1px solid #555;
-}
-
-body.dark-mode .dropdown-content a:hover {
-  background-color: #555;
-}
-
-.dropdown-content {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.dropdown:hover .dropdown-content {
-  opacity: 1;
-  visibility: visible;
-}
-
-.dropdown-content a:last-child {
-  border-bottom: none;
-}
-.quick-actions {
-  margin-top: 30px;
+/* About, Features, Contact Sections */
+.about-container,
+.internships-container,
+.qas-container {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin: 30px auto;
+  width: 100%;
+  max-width: 1200px;
 }
 
-.action-btn {
+.about-text,
+.internships-text,
+.qas-text {
+  flex: 1;
+  font-size: 22px;
+  font-weight: 500;
+  padding: 10px;
+}
+
+.image-about,
+.image-internships,
+.image-qas {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.image-about img,
+.image-internships img,
+.image-qas img {
+  width: 80%;
+  height: 80%;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.image-main img:hover,
+.image-about img:hover,
+.image-internships img:hover,
+.image-qas img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.button-container button {
   display: inline-block;
+  margin-top: 20px;
   padding: 12px 24px;
-  background: #007BFF;
+  background-color: #007bff;
   color: white;
-  text-decoration: none;
+  font-size: 16px;
   font-weight: 600;
-  border-radius: 5px;
-  transition: background 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-.action-btn:hover {
-  background: #0056b3;
-  transform: translateY(-5px);
+.button-container button:hover {
+  background-color: #6392c5;
 }
 
-.action-btn:active {
-  transform: translateY(1px);
+.about-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-@media screen and (max-width: 768px) {
-  /* Header and Navigation */
-  header {
-    padding: 8px 15px;
-    height: 60px;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-  }
-
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-  }
-
-  .logo {
-    font-size: 20px;
-    z-index: 1001;
-  }
-
-  .mobile-menu-toggle {
-    display: block;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 1001;
-    color: inherit;
-  }
-
-  .nav-links {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.98);
-    padding: 20px 0;
-    overflow: hidden;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    z-index: 999;
-  }
-  
-  
-
-  .nav-active .nav-links {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
-  }
-  
-  
-
-  .nav-links li {
-    width: 100%;
-    text-align: center;
-    padding: 15px 0;
-  }
-
-  .nav-links li a {
-    font-size: 18px;
-    padding: 10px 0;
-    display: block;
-  }
-
-  /* Dropdown Menu */
-  .dropdown-content {
-    position: static;
-    display: none;
-    width: 100%;
-    box-shadow: none;
-    background: rgba(0, 0, 0, 0.05);
-  }
-
-  .dropdown-content.show {
-    display: block;
-  }
-
-  .dropdown-content a {
-    padding: 12px 0;
-  }
-
-  /* Homepage Content */
-  .homepage-content {
-    margin-top: 80px;
-    padding: 25px 15px;
-    width: 95%;
-  }
-
-  h1 {
-    font-size: 32px;
-  }
-
-  /* Quick Actions */
-  .quick-actions {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .action-btn {
-    width: 100%;
-    max-width: none;
-  }
-
-  /* Dark Mode Adjustments */
-  body.dark-mode .nav-links {
-    background: rgba(30, 30, 30, 0.98);
-  }
-
-  body.dark-mode .dropdown-content {
-    background: rgba(0, 0, 0, 0.2);
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .logo {
-    font-size: 18px;
-  }
-
-  .homepage-content {
-    margin-top: 70px;
-    padding: 20px 10px;
-  }
-
-  h1 {
-    font-size: 28px;
-  }
-
-  .nav-links li a {
-    font-size: 16px;
-  }
-}
-
-/* Dark Mode Styles */
-body.dark-mode {
-  background-color: #121212; /* Dark background */
-  color: #f4f4f4;
-}
-
-body.dark-mode .homepage-content {
-  background-color: #333; /* Darker content box */
-}
-
-body.dark-mode header {
-  background: rgba(0, 0, 0, 0.8); /* Darker header */
-}
-
-body.dark-mode .logo {
-  color: #f4f4f4;
-}
-
-body.dark-mode .nav-links li a {
-  color: #f4f4f4;
-}
-
-body.dark-mode .nav-links li a:hover {
-  color: #007bff;
-}
-
-body.dark-mode h1 {
-  color: #f4f4f4;
-}
-
-body.dark-mode .action-btn {
-  background: #007BFF;
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
-}
-
-body.dark-mode .action-btn:hover {
-  background: #0056b3;
-}
-
-/* Fixing button text for better contrast */
-body.dark-mode .action-btn:active {
-  background: #003366;
+.about-button:hover {
+  background-color: #6392c5;
 }
