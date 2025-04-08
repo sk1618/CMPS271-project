@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  color: rgb(0, 0, 0);
+}
+
+.our-team {
+  background: rgb(255, 255, 255);
+  min-height: 100vh;
+  width: 100%;
+  text-align: center;
+  padding-top: 100px;
+  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.our-team h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: rgb(1, 0, 0);
+  font-weight: bold;
+}
+
+.swiper {
+  position: relative;
+  width: 90%;
+  max-width: 1150px;
+  height: 80vh;
+  max-height: 550px;
+  padding: 0 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInText 1s ease-out;
+}
+
+.swiper-slide {
+  background: linear-gradient(to top, #9999990D, #FFFFFF0D);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: solid 2px #FFFFFF1A;
+  max-height: 400px;
+  flex-direction: column;
+  padding: 30px 20px;
+  transition: transform 0.3s ease;
+}
+
+.swiper-slide:hover {
+  transform: translateY(-5px);
+}
+
+.card-avatar-img {
+  width: 120px;
+  height: 120px;
+  border: solid 2px #0000001a;
+  border-radius: 50%;
+  padding: 8px;
+  background: #00000040;
+  margin-bottom: 16px;
+}
+
+.card-name-txt {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.card-role-txt {
+  font-weight: normal;
+  margin-bottom: 24px;
+  color: #000000b3;
+}
+
+.card-follow-btn {
+  background: #007BFF;
+  padding: 8px 50px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.card-follow-btn:hover {
+  background: #006FDB;
+}
+
+.card-follow-btn:active {
+  background: #0057B0;
+  transform: scale(0.95);
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #000000b3;
+  position: absolute;  /* Make sure they are positioned absolutely */
+  top: 200px;
+  transform: scale(0.7);
+  transition: transform 0.25s, color 0.25s;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  color: #007BFF;
+  transform: scale(1);
+}
+
+.swiper-pagination-bullet {
+  background: rgb(0, 0, 0);
+  width: 15px;
+  height: 15px;
+  opacity: 1;
+  margin-top: -30px;
+}
+
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .swiper {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
+  }
+
+  .card-follow-btn {
+    padding: 8px 30px;
+  }
+}
+
+/* Contact Support Section Styling */
+.contact-email {
+  background: #f9f9f9;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.contact-email h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.contact-email p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.email-link {
+  font-size: 1.2rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.email-link:hover {
+  color: #0056b3;
+}
+
+.cta-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);  /* Add scale effect on hover */
+  }
+  
+  .cta-button:active {
+    background-color: #003d7a;
+    transform: scale(0.95);  /* Slightly reduce scale when button is clicked */
+  }
