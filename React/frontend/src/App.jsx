@@ -7,13 +7,14 @@ import Inventory from './pages/Inventory';
 import Transaction from './pages/Transaction';
 import Settings from './pages/settings';
 import Profile from './pages/profile';
-import Signin from './pages/signIn';
+import Signin from './pages/signin';
 import Signup from './pages/signup';
 import Budget from './pages/budget';
 import Dashboard from './pages/dashboard';
 import TeamSection from './pages/teamSection';
 import TodoApp from './pages/toBuy';
-import OurServices from './pages/ourServices';
+import OurServicesPage from "./pages/ourServices.jsx";
+
 
 
 const ErrorFallback = ({ error }) => (
@@ -32,14 +33,14 @@ const AppContent = () => {
       {shouldShowHeader && <Header />}
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Signin />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/homePage" element={<HomePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/toBuy" element={<TodoApp />} />
           <Route path="/transaction" element={<Transaction />} />
           <Route path="/teamSection" element={<TeamSection/>}/>
-          <Route path="/ourServices" element={<OurServices/>}/>
+          <Route path="/ourServices" element={<OurServicesPage />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/signin" element={<Signin />} />
