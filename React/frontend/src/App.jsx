@@ -14,7 +14,7 @@ import Dashboard from './pages/dashboard';
 import TeamSection from './pages/teamSection';
 import TodoApp from './pages/toBuy';
 import OurServices from './pages/ourServices';
-import data from "./pages/data";
+
 
 const ErrorFallback = ({ error }) => (
   <div role="alert">
