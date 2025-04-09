@@ -8,7 +8,7 @@ import Transaction from './pages/Transaction';
 import ToBuy from './pages/toBuy';
 import Settings from './pages/settings';
 import Profile from './pages/profile';
-import Signin from './pages/signin';
+import Signin from './pages/signIn';
 import Signup from './pages/signup';
 import Budget from './pages/budget';
 import Dashboard from './pages/dashboard';
@@ -30,7 +30,7 @@ const AppContent = () => {
       {shouldShowHeader && <Header />}
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Signin />} />
           <Route path="/homePage" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inventory" element={<Inventory />} />

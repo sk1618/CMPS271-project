@@ -3,36 +3,36 @@ import { Link } from 'react-router-dom';
 import '../styles/header.css'; // Import CSS for styling
 
 const Header = () => {
-	return (
-		<header>
-			<nav>
-				<a href="/homePage" class="logo">Finoria</a>
-				<ul class="nav-links">
-					<li><a href="/frontend/dashboard.html">Dashboard</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropbtn">Inventory & Budget</a>
-						<div class="dropdown-content">
-							<a href="../inventory">Inventory</a>
-							<a href="../budget">Budget</a>
-						</div>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropbtn">Transactions & Purchasing</a>
-						<div class="dropdown-content">
-							<a href="../transaction">Transactions</a>
-							<a href="../toBuy">Purchasing List</a>
-						</div>
-					</li>
-					<li><a href="#">Reports</a></li>
-					<li><a href="/settings">Settings</a></li>
-					<li><Link to="/profile">
-						<i className="fas fa-user"></i>Profile
-					</Link></li>
-					<li><a href="#" id="logout">Logout</a></li>
-				</ul>
-			</nav>
-		</header>
-	);
+  return (
+    <header>
+      <nav>
+        <Link to="/homePage" className="logo">Finoria</Link>
+        <ul className="nav-links">
+          <li><Link to="/dashboard">Dashboard</Link></li>
+          <li className="dropdown">
+            <a href="#" className="dropbtn">Inventory & Budget</a>
+            <div className="dropdown-content">
+              <Link to="/inventory">Inventory</Link>
+              <Link to="/budget">Budget</Link>
+            </div>
+          </li>
+          <li className="dropdown">
+            <a href="#" className="dropbtn">Transactions & Purchasing</a>
+            <div className="dropdown-content">
+              <Link to="/transaction">Transactions</Link>
+              <Link to="/toBuy">Purchasing List</Link>
+            </div>
+          </li>
+          <li><Link to="#">Reports</Link></li>
+          <li><Link to="/settings">Settings</Link></li>
+          <li><Link to="/profile">
+            <i className="fas fa-user"></i>Profile
+          </Link></li>
+          <li><Link to="#" id="logout">Logout</Link></li>
+        </ul>
+      </nav>
+    </header>
+  );
 };
 
 export default Header;

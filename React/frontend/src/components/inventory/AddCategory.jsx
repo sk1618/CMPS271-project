@@ -11,7 +11,7 @@ const AddCategory = ({ onCategoryAdded }) => {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/add_category/', {
+      const response = await axios.post('https://backend-cmps271.onrender.com/add_category/', {
         name: categoryName,
       },{ headers:{
         'Authorization':`Bearer ${localStorage.getItem("access_token")}`

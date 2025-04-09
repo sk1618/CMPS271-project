@@ -16,7 +16,7 @@ function SignIn() {
         formData.append('username', username);
         formData.append('password', password);
         
-        const response = await fetch(`http://localhost:8000/login`, {
+        const response = await fetch(`https://backend-cmps271.onrender.com/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -34,7 +34,7 @@ function SignIn() {
             localStorage.setItem('email', data.email);
             
             // Redirect to dashboard or home page
-            window.location.href = 'frontend/dashboard.html'; // Change this to your dashboard URL
+            navigate("/inventory"); // Change this to your dashboard URL
         } else {
             // Login failed
             alert('Login failed: ' + (data.detail || 'Invalid credentials'));

@@ -464,5 +464,8 @@ async def fetch_stock_news(
         raise HTTPException(status_code=500, detail=f"Failed to fetch news: {str(e)}")
 
 
+@app.get("/")
+async def hello():
+    return {"message": "Hello, World!"}
 
 
