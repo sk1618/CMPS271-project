@@ -34,7 +34,7 @@ function SignIn() {
             localStorage.setItem('email', data.email);
             
             // Redirect to dashboard or home page
-            navigate("/"); // Change this to your dashboard URL
+            navigate("/homePage"); // Change this to your dashboard URL
         } else {
             // Login failed
             alert('Login failed: ' + (data.detail || 'Invalid credentials'));
