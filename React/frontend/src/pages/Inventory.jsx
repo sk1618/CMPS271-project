@@ -23,19 +23,23 @@ const Inventory = () => {
 
   return (
     <div>
-       <br /><br /><br />
-    <div className="homepage-content">
-     
-      <AddCategory onCategoryAdded={triggerRefetch} />
-      <CategoryList shouldRefetch={shouldRefetch} openPopup={openPopup} />
-      <ItemsPopup
-        isOpen={isPopupOpen}
-        closePopup={closePopup}
-        category_id={selectedCategoryId} // Pass the selected category ID
-      />
-    </div>
+      <br /><br /><br />
+      <div className="homepage-content">
+        
+        <div className="category-section">
+          <AddCategory onCategoryAdded={triggerRefetch} />
+          <CategoryList shouldRefetch={shouldRefetch} openPopup={openPopup} />
+        </div>
+  
+        <ItemsPopup
+          isOpen={isPopupOpen}
+          closePopup={closePopup}
+          category_id={selectedCategoryId}
+        />
+      </div>
     </div>
   );
+  
 };
 
 export default Inventory;
