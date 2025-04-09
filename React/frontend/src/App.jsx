@@ -27,14 +27,6 @@ const AppContent = () => {
   const location = useLocation();
   const hideHeaderOn = ["/signin", "/signup"];
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
-  const cards = data.map((item, index) => (
-    <OurServices
-      key={index}
-      image={item.img}
-      name={item.name}
-      description={item.des} // or item.description if you're using that key
-    />
-  ));
   return (
     <>
       {shouldShowHeader && <Header />}
