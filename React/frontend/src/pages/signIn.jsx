@@ -34,7 +34,7 @@ function SignIn() {
             localStorage.setItem('email', data.email);
             
             // Redirect to dashboard or home page
-            window.location.href = 'frontend/dashboard.html'; // Change this to your dashboard URL
+            window.location.href = '../homePage'; // Change this to your dashboard URL
         } else {
             // Login failed
             alert('Login failed: ' + (data.detail || 'Invalid credentials'));
@@ -49,7 +49,7 @@ function SignIn() {
     handleSignIn();
     localStorage.setItem("email", email);
     localStorage.setItem("password", password);
-    navigate("/profile");
+    navigate("/homePage");
   };
 
   return (
