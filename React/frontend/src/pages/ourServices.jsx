@@ -5,7 +5,7 @@ import assistance from "../assets/assistance.png";
 import custom from "../assets/custom.png";
 import future from "../assets/future.png";
 import secure from "../assets/secure.png";
-import smartExpense from "../assets/smartExpense.png";
+import smartExpense from "../assets/smartExpense.jnp.jpg";
 import budget from "../assets/budget.png";
 
 
