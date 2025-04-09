@@ -7,7 +7,7 @@ const CategoryList = ({ shouldRefetch, openPopup }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/categories/',{ headers:{
+        const response = await axios.get('https://backend-cmps271.onrender.com/categories/',{ headers:{
           'Authorization':`Bearer ${localStorage.getItem("access_token")}`
          }});
         setCategories(response.data.categories);

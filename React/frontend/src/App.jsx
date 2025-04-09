@@ -7,7 +7,7 @@ import Inventory from './pages/Inventory';
 import Transaction from './pages/Transaction';
 import Settings from './pages/settings';
 import Profile from './pages/profile';
-import Signin from './pages/signin';
+import Signin from './pages/signIn';
 import Signup from './pages/signup';
 import Budget from './pages/budget';
 import Dashboard from './pages/dashboard';

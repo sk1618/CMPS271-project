@@ -11,7 +11,7 @@ function Signup() {
     // Extract username from email (or you could add a username field)
     const username = email.split('@')[0];  
     try {
-        const response = await fetch(`http://localhost:8000/register`, {
+        const response = await fetch(`https://backend-cmps271.onrender.com/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

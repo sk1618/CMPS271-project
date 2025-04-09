@@ -12,7 +12,7 @@ function Budget() {
   // Fetch budgets based on parent_id
   const fetchBudgets = async (parentId = 0) => {
     try {
-      const response = await axios.get('http://localhost:8000/budgets/', {
+      const response = await axios.get('https://backend-cmps271.onrender.com/budgets/', {
         params: { parent_id: parentId }
       });
       return response.data.budgets;
@@ -25,7 +25,7 @@ function Budget() {
   // Fetch the main budget (with parent_id = 0) and its sub-budgets
   const fetchMainBudget = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/budgets/', {
+      const response = await axios.get('https://backend-cmps271.onrender.com/budgets/', {
         params: { parent_id: 0 }
       });
       const main = response.data.budgets[0]; // Assuming the first one is the main budget
@@ -41,7 +41,7 @@ function Budget() {
   // Function to start and create the main budget
   const handleStart = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/start/');
+      const response = await axios.post('https://backend-cmps271.onrender.com/start/');
       setMainBudget(response.data);
       const subs = await fetchBudgets(response.data.id);
       setSubBudgets(subs);
@@ -58,7 +58,7 @@ function Budget() {
     const name = prompt('Enter the name for the sub-budget');
     if (name) {
       try {
-        await axios.post(`http://localhost:8000/create_sub_budget/${parentBudgetId}`, { name });
+        await axios.post(`https://backend-cmps271.onrender.com/create_sub_budget/${parentBudgetId}`, { name });
         // Re-fetch the main budget to update both the parent's amount and sub-budgets.
         await fetchMainBudget();
       } catch (error) {
@@ -72,7 +72,7 @@ function Budget() {
     if (amount <= 0) return;
 
     try {
-      await axios.post(`http://localhost:8000/add_budget_amount/${budgetId}`, { amount });
+      await axios.post(`https://backend-cmps271.onrender.com/add_budget_amount/${budgetId}`, { amount });
       // For both main and sub-budgets, re-fetch the main budget and its sub-budgets
       await fetchMainBudget();
       setAmountInputs((prev) => ({ ...prev, [budgetId]: '' }));
@@ -86,7 +86,7 @@ function Budget() {
     if (amount <= 0) return;
 
     try {
-      await axios.post(`http://localhost:8000/remove_budget_amount/${budgetId}`, { amount });
+      await axios.post(`https://backend-cmps271.onrender.com/remove_budget_amount/${budgetId}`, { amount });
       // For both main and sub-budgets, re-fetch the main budget and its sub-budgets
       await fetchMainBudget();
       setAmountInputs((prev) => ({ ...prev, [budgetId]: '' }));

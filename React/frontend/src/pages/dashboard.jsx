@@ -7,23 +7,143 @@ const Dashboard = () => {
     const [totalSales, setTotalSales] = useState(0);
     const [salesData, setSalesData] = useState([]);
     const [labels, setLabels] = useState([]);
-    const chartRef = useRef(null);
+    const [toBuyList, setToBuyList] = useState([]);
+    const [calendarRows, setCalendarRows] = useState([]);
+    const [monthName, setMonthName] = useState('');
+    const [apiError, setApiError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const chart1Ref = useRef(null);
+    const chart2Ref = useRef(null);
+    const chart3Ref = useRef(null);
+    const chartInstance1 = useRef(null);
+    const chartInstance2 = useRef(null);
+    const chartInstance3 = useRef(null);
 
     useEffect(() => {
         loadTransactions();
-        
-        // Apply dark mode after a slight delay to ensure DOM is ready
-        const timer = setTimeout(() => {
-            applyDarkModeToDynamicElements();
-        }, 100);
-        
+        generateCalendar();
+        loadToBuyList();
+        applyDarkModeToDynamicElements();
+
         return () => {
-            clearTimeout(timer);
-            if (chartRef.current) {
-                chartRef.current.destroy();
-            }
+            chartInstance1.current?.destroy();
+            chartInstance2.current?.destroy();
+            chartInstance3.current?.destroy();
         };
     }, []);
+
+    const loadTransactions = async () => {
+        setApiError(null);
+        setIsLoading(true);
+        
+        try {
+            const response = await fetch('https://backend-cmps271.onrender.com/transactions');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const data = await response.json();
+            processTransactionData(data);
+            initializeCharts();
+        } catch (error) {
+            console.error('API Error:', error);
+            setApiError('Failed to load transaction data. Using demo data.');
+            
+            const mockData = {
+                transactions: [
+                    { amount: 150 }, { amount: 200 }, 
+                    { amount: 300 }, { amount: 250 }, 
+                    { amount: 400 }
+                ]
+            };
+            processTransactionData(mockData);
+            initializeCharts();
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const processTransactionData = (data) => {
+        let total = 0;
+        const newSalesData = [];
+        const newLabels = [];
+
+        data.transactions.forEach((transaction, index) => {
+            total += transaction.amount;
+            newSalesData.push(total);
+            newLabels.push(index + 1);
+        });
+
+        setTotalSales(total);
+        setSalesData(newSalesData);
+        setLabels(newLabels);
+    };
+
+    const initializeCharts = () => {
+        // Sales Chart (Line)
+        if (chartInstance1.current) chartInstance1.current.destroy();
+        const ctx1 = chart1Ref.current.getContext('2d');
+        chartInstance1.current = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: labels.length > 0 ? labels : [1, 2, 3, 4, 5],
+                datasets: [{
+                    label: 'Sales Amount',
+                    data: salesData.length > 0 ? salesData : [100, 200, 300, 400, 500],
+                    borderColor: '#007BFF',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Stats Chart (Pie)
+        if (chartInstance2.current) chartInstance2.current.destroy();
+        const ctx2 = chart2Ref.current.getContext('2d');
+        chartInstance2.current = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: ['Product A', 'Product B', 'Product C', 'Product D'],
+                datasets: [{
+                    data: [30, 25, 20, 25],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+        // Monthly Chart (Bar)
+        if (chartInstance3.current) chartInstance3.current.destroy();
+        const ctx3 = chart3Ref.current.getContext('2d');
+        chartInstance3.current = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Monthly Sales',
+                    data: [1200, 1900, 1500, 2000, 1800, 2100],
+                    backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+    };
 
     const generateCalendar = () => {
         const today = new Date();
@@ -35,86 +155,50 @@ const Dashboard = () => {
         const daysInMonth = lastDay.getDate();
         const firstDayOfWeek = firstDay.getDay();
 
-        let calendarRows = [];
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        setMonthName(monthNames[currentMonth]);
+
+        let rows = [];
         let day = 1;
+
         for (let i = 0; i < 6; i++) {
-            let row = [];
+            let cells = [];
             for (let j = 0; j < 7; j++) {
                 if (i === 0 && j < firstDayOfWeek) {
-                    row.push(<td key={`empty-${i}-${j}`}></td>);
+                    cells.push(<td key={`empty-${i}-${j}`}></td>);
                 } else if (day <= daysInMonth) {
-                    const isToday = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
-                    row.push(
+                    const isToday = day === today.getDate();
+                    cells.push(
                         <td key={`day-${day}`} className={isToday ? 'today' : ''}>
                             {day}
                         </td>
                     );
                     day++;
                 } else {
-                    row.push(<td key={`empty-end-${i}-${j}`}></td>);
+                    cells.push(<td key={`empty-end-${i}-${j}`}></td>);
                 }
             }
-            calendarRows.push(<tr key={`row-${i}`}>{row}</tr>);
+            rows.push(<tr key={`row-${i}`}>{cells}</tr>);
             if (day > daysInMonth) break;
         }
 
-        return calendarRows;
+        setCalendarRows(rows);
     };
 
-    const loadTransactions = async () => {
-        try {
-            const response = await fetch('http://127.0.0.1:8000/transactions');
-            const data = await response.json();
-            let total = 0;
-            let newSalesData = [];
-            let newLabels = [];
-            data.transactions.forEach((transaction, index) => {
-                total += transaction.amount;
-                newSalesData.push(total);
-                newLabels.push(index + 1);
-            });
-            setTotalSales(total);
-            setSalesData(newSalesData);
-            setLabels(newLabels);
-            updateSalesChart(newSalesData, newLabels);
-        } catch (error) {
-            console.error('Error fetching transactions:', error);
-            // Fallback data if API fails
-            const fallbackData = [100, 200, 300, 400, 500];
-            const fallbackLabels = [1, 2, 3, 4, 5];
-            setTotalSales(500);
-            setSalesData(fallbackData);
-            setLabels(fallbackLabels);
-            updateSalesChart(fallbackData, fallbackLabels);
-        }
-    };
-
-    const updateSalesChart = (salesData, labels) => {
-        const ctx = document.getElementById('chart1');
-        if (!ctx) return;
-
-        if (chartRef.current) {
-            chartRef.current.destroy();
-        }
-
-        chartRef.current = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Sales Amount Over Time',
-                    data: salesData,
-                    borderColor: '#007BFF',
-                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
+    const loadToBuyList = () => {
+        const savedList = localStorage.getItem("toBuyListItems");
+        if (savedList) {
+            try {
+                setToBuyList(JSON.parse(savedList));
+            } catch {
+                setToBuyList([]);
             }
-        });
+        } else {
+            setToBuyList([]);
+        }
     };
 
     const applyDarkModeToDynamicElements = () => {
@@ -125,41 +209,82 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
-            <header>
-                <nav>
-                    <a href="/homePage" className="logo">Finoria</a>
-                    <ul className="nav-links">
-                        <li><a href="/dashboard">Dashboard</a></li>
-                        <li><a href="/toBuy">Purchasing List</a></li>
-                        <li><a href="/expenses">Transactions</a></li>
-                        <li><a href="#">Reports</a></li>
-                        <li><a href="/settings">Settings</a></li>
-                        <li><a href="/profile"><i className="fas fa-user"></i> Profile</a></li>
-                        <li><a href="#">Logout</a></li>
-                    </ul>
-                </nav>
-            </header>
             <div className="main-content">
-                <section className="dashboard-grid">
-                    <div className="card chart-container">
+                {apiError && (
+                    <div className="error-message">
+                        <p>{apiError}</p>
+                    </div>
+                )}
+
+                <div className="dashboard-grid">
+                    <div className="card sales-card">
                         <h3>Sales</h3>
-                        <p>${totalSales.toFixed(2)}</p>
-                        <div className="chart-wrapper">
-                            <canvas id="chart1"></canvas>
+                        {isLoading ? (
+                            <p>Loading sales data...</p>
+                        ) : (
+                            <>
+                                <p id="totalSalesAmount">${totalSales.toFixed(2)}</p>
+                                <div className="chart-container">
+                                    <canvas ref={chart1Ref}></canvas>
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    <div className="card stats-card">
+                        <h3>Stats</h3>
+                        <div className="chart-container">
+                            <canvas ref={chart2Ref}></canvas>
                         </div>
                     </div>
-                    <div className="card">
-                        <h3>Calendar</h3>
-                        <table className="calendar">
-                            <thead>
-                                <tr>
-                                    <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
-                                </tr>
-                            </thead>
-                            <tbody>{generateCalendar()}</tbody>
-                        </table>
+
+                    <div className="card progress-card">
+                        <h3>Progress</h3>
+                        <input type="range" min="0" max="100" defaultValue="50" />
+                        <div className="progress-labels">
+                            <span>0%</span>
+                            <span>50%</span>
+                            <span>100%</span>
+                        </div>
                     </div>
-                </section>
+
+                    <div className="card monthly-card">
+                        <h3>Monthly Data</h3>
+                        <div className="chart-container">
+                            <canvas ref={chart3Ref}></canvas>
+                        </div>
+                    </div>
+
+                    <div className="card buy-list-card">
+                        <h3>To-Buy List</h3>
+                        <ul id="dashboard-toBuyList">
+                            {toBuyList.length > 0 ? (
+                                toBuyList.map((item, idx) => (
+                                    <li key={idx}>{item}</li>
+                                ))
+                            ) : (
+                                <li>No items yet</li>
+                            )}
+                        </ul>
+                    </div>
+
+                    <div className="card calendar-card">
+                        <h3>Calendar</h3>
+                        <div className="calendar">
+                            <p id="currentMonth">{monthName}</p>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {calendarRows}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

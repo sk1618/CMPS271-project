@@ -64,7 +64,11 @@ const ItemsPopup = ({ isOpen, closePopup, category_id }) => {
   const fetchItems = async () => {
     if (!category_id) return;
     try {
-      const response = await fetch(`http://127.0.0.1:8000/category/${category_id}`);
+      const response = await fetch(`https://backend-cmps271.onrender.com/category/${category_id}`, {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("access_token")}`, // ✅ optional if this route requires auth
+        },
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch items");
       }
@@ -75,6 +79,7 @@ const ItemsPopup = ({ isOpen, closePopup, category_id }) => {
       console.error("Error fetching items:", error);
     }
   };
+  
 
   // Fetch items when the popup opens or when category_id changes
   useEffect(() => {
@@ -97,19 +102,20 @@ const ItemsPopup = ({ isOpen, closePopup, category_id }) => {
     try {
       const itemWithCategory = { ...newItem, category_id };
       console.log("Category ID for new item:", category_id);
-
-      const response = await fetch("http://127.0.0.1:8000/add_item/", {
+  
+      const response = await fetch("https://backend-cmps271.onrender.com/add_item/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("access_token")}` // ✅ Add auth here
         },
         body: JSON.stringify(itemWithCategory),
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to add item");
       }
-
+  
       console.log("Item added successfully");
       fetchItems(); // Refetch items after adding a new one
       setShowAddItemForm(false);
@@ -117,6 +123,7 @@ const ItemsPopup = ({ isOpen, closePopup, category_id }) => {
       console.error("Error adding item:", error);
     }
   };
+  
 
   if (!isOpen) return null;
 

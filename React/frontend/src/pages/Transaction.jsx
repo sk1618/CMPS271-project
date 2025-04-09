@@ -18,7 +18,7 @@ const Transaction = () => {
     // Function to load categories, budgets, and transactions
     useEffect(() => {
         // Load categories
-        fetch('http://127.0.0.1:8000/categories/',{headers:{
+        fetch('https://backend-cmps271.onrender.com/categories/',{headers:{
         'Authorization':`Bearer ${localStorage.getItem("access_token")}`
         }})
             .then((response) => response.json())
@@ -30,7 +30,7 @@ const Transaction = () => {
             });
 
         // Load all budgets using the new API
-        fetch('http://127.0.0.1:8000/get_all_budgets/',{headers:{
+        fetch('https://backend-cmps271.onrender.com/get_all_budgets/',{headers:{
             'Authorization':`Bearer ${localStorage.getItem("access_token")}`
             }})
             .then((response) => response.json())
@@ -47,7 +47,7 @@ const Transaction = () => {
 
     // Function to load transactions
     const loadTransactions = () => {
-        fetch('http://127.0.0.1:8000/transactions/',{headers:{
+        fetch('https://backend-cmps271.onrender.com/transactions/',{headers:{
             'Authorization':`Bearer ${localStorage.getItem("access_token")}`
             }})
             .then((response) => response.json())
@@ -62,7 +62,7 @@ const Transaction = () => {
     // Function to fetch items based on selected category
     const loadItems = (categoryId) => {
         if (!categoryId) return;
-        fetch(`http://127.0.0.1:8000/category/${categoryId}`,{headers:{
+        fetch(`https://backend-cmps271.onrender.com/category/${categoryId}`,{headers:{
             'Authorization':`Bearer ${localStorage.getItem("access_token")}`
             }})
             .then((response) => response.json())
@@ -100,7 +100,7 @@ const Transaction = () => {
     
         console.log("Form Data to Send:", formDataToSend.toString());
     
-        fetch('http://127.0.0.1:8000/add_transaction/', {
+        fetch('https://backend-cmps271.onrender.com/add_transaction/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
