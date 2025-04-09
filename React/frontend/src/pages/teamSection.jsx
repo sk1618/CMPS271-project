@@ -21,7 +21,7 @@ const teamMembers = [
 ];
 
 const TeamSection = () => {
-    const emailRef = useRef(null);
+  const emailRef = useRef(null);
 
   useEffect(() => {
     // Ensure page is scrolled to the top
@@ -63,23 +63,37 @@ const TeamSection = () => {
       >
         {teamMembers.map((member, index) => (
           <SwiperSlide key={index}>
-            <img className="card-avatar-img" src={member.img} alt={member.name} />
+            <img
+              className="card-avatar-img"
+              src={member.img}
+              alt={member.name}
+            />
             <h2 className="card-name-txt">{member.name}</h2>
-            <h3 className="card-role-txt" id={`role-${index}`}>{member.role}</h3>
-            <button className="card-follow-btn" onClick={(e) => handleClick(e, index)}>
+            <h3 className="card-role-txt" id={`role-${index}`}>
+              {member.role}
+            </h3>
+            <button
+              className="card-follow-btn"
+              onClick={(e) => handleClick(e, index)}
+            >
               View more
             </button>
           </SwiperSlide>
         ))}
       </Swiper>
 
-       {/* Email Contact Section */}
-       <section ref={emailRef} className="email-section">
-       <h2>Contact Support</h2>
-  <p>If you have any questions or need assistance, feel free to reach out to our support team.</p>
-  <p class="email-info">You can email us at:</p>
-  <a href="mailto:aminemwehbe@gmail.com" class="email-link">support@finoria.com</a>
-  <button class="cta-button">Contact Support</button>
+      {/* Email Contact Section */}
+      <section ref={emailRef} className="email-section">
+        <h2>Contact Support</h2>
+        <p>
+          If you have any questions or need assistance, feel free to reach out
+          to our support team.
+        </p>
+        <p class="email-info">You can email us at:</p>
+        <a href="mailto:aminemwehbe@gmail.com" class="email-link">
+          support@finoria.com
+        </a>
+        <button class="cta-button">Contact Support</button>
       </section>
     </section>
   );
