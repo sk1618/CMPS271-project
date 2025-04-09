@@ -1,7 +1,8 @@
 # Step 1: Navigate to your project directory
 
 # Step 2: Create a virtual environment (if not already created)
-python3 -m venv env
+python -m venv env
+python3 -m venv env(mac)
 
 eza aa coputer l jem3a run this before Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
