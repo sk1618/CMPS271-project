@@ -8,7 +8,7 @@ const Header = () => {
 			<nav>
 				<a href="/homePage" class="logo">Finoria</a>
 				<ul class="nav-links">
-					<li><a href="/frontend/dashboard.html">Dashboard</a></li>
+					<li><a href="../dashboard">Dashboard</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropbtn">Inventory & Budget</a>
 						<div class="dropdown-content">
@@ -23,7 +23,13 @@ const Header = () => {
 							<a href="../toBuy">Purchasing List</a>
 						</div>
 					</li>
-					<li><a href="/teamSection">Who We Are</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropbtn">Who We Are</a>
+						<div class="dropdown-content">
+							<a href="../teamSection">Our Team</a>
+							<a href="../ourServices">Our Services</a>
+						</div>
+					</li>
 					<li><a href="/settings">Settings</a></li>
 					<li><Link to="/profile">
 						<i className="fas fa-user"></i>Profile
