@@ -22,15 +22,19 @@ body {
 
 .main-content {
   flex-grow: 1;
-  padding: 100px 20px 20px;
+  padding: 20px;
   width: 95%;
   max-width: 1800px;
+  margin: 0 auto; /* center content */
+  display: flex;
+  justify-content: center;
 }
 
 .dashboard-grid {
   display: grid;
-  gap: 20px;
+  gap: 30px; /* reduced spacing */
   width: 100%;
+  max-width: 1800px;
 }
 
 /* Dynamic Grid Columns */
@@ -138,7 +142,7 @@ input[type="range"]::-webkit-slider-thumb {
   flex-grow: 1;
 }
 
-#dashboard-toBuyList li {  
+#dashboard-toBuyList li {
   padding: 8px 12px;
   margin: 5px 0;
   list-style-type: none;
@@ -247,16 +251,16 @@ body.dark-mode .calendar th {
   .main-content {
     padding: 80px 10px 10px;
   }
-  
+
   .card {
     padding: 15px;
     min-height: 200px;
   }
-  
+
   .card h3 {
     font-size: 1.1rem;
   }
-  
+
   #totalSalesAmount {
     font-size: 1.5rem;
   }

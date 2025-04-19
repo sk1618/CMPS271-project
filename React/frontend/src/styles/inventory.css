@@ -340,3 +340,21 @@ button:hover {
   min-width: 300px;
   max-width: 800px;
 }
+
+.popup-left .item-block
+{
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}
+
+.popup-left .item-button:hover
+{
+  background-color: #45a049;
+}
+
+.popup-left input {
+  border: 1px solid #ccc !important;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  box-sizing: border-box;
+}

@@ -23,7 +23,6 @@ const Inventory = () => {
 
   return (
     <div>
-      <br /><br /><br />
       <div className="homepage-content">
         
         <div className="category-section">
