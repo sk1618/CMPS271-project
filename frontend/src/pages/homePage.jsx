@@ -55,9 +55,9 @@ const HomePage = () => {
               Finoria helps you track your expenses, visualize your spending,
               and set realistic financial goals—all in one place.
             </p>
-            <a href="/ourServices" className="about-button">
+            <Link to="/ourServices" className="about-button">
               Learn More!
-            </a>
+            </Link>
           </div>
           <div className="image-about">
             <img src={budget3} alt="About Finoria" />

@@ -4,13 +4,13 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from typing import List
 
-from backend.auth_utils import (
+from auth_utils import (
     get_db, authenticate_user, create_access_token, 
     get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES,
     get_password_hash, get_user_by_username, get_user_by_email
 )
-from backend.schemas import UserCreate, UserLogin, UserResponse, Token
-from backend.models import User
+from schemas import UserCreate, UserLogin, UserResponse, Token
+from models import User
 
 router = APIRouter(tags=["Authentication"])
 
