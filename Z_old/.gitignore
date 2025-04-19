@@ -1,7 +1,0 @@
-.env
-
-backend/__pycache__/
-*.pyc
-*.pyo
-
-cmps271/
