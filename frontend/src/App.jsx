@@ -26,7 +26,7 @@ const ErrorFallback = ({ error }) => (
 
 const AppContent = () => {
   const location = useLocation();
-  const hideHeaderOn = ["/signin", "/signup"];
+  const hideHeaderOn = ["/","/signin", "/signup"];
   const shouldShowHeader = !hideHeaderOn.includes(location.pathname);
   return (
     <>
